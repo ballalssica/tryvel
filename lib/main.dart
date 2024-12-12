@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
               },
             ),
             minimumSize: WidgetStateProperty.all(
-              const Size.fromHeight(50),
+              const Size.fromHeight(60),
             ),
             textStyle: WidgetStateProperty.all(
               const TextStyle(
@@ -56,6 +56,46 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
+          ),
+        ),
+
+        //INPUT BOX
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: const TextStyle(
+            fontSize: 15,
+            color: Colors.grey,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 20,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.grey, // 비활성화 상태 테두리 색상
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.amber, // 포커스 상태 테두리 색상
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Color(0xFFFFCDD2), // 에러 상태 테두리 색상
+              width: 2,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.amber, // 포커스된 에러 상태 테두리 색상
+              width: 2,
+            ),
+          ),
+          errorStyle: const TextStyle(
+            color: Color(0xFFFFA000), // 에러 메시지 색상
+            fontSize: 12, // 에러 메시지 글자 크기
           ),
         ),
       ),
