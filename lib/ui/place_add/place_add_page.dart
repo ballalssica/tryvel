@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tryvel/ui/widgets/business_name_text_form_field.dart';
-import 'package:tryvel/ui/widgets/category_dropdown_form_field.dart';
 import 'dart:io';
 
 import 'package:tryvel/ui/widgets/stroe_name_text_form_field.dart';
+import 'package:tryvel/ui/widgets/business_name_text_form_field.dart';
+import 'package:tryvel/ui/widgets/category_dropdown_form_field.dart';
 
 class PlaceAddPage extends StatefulWidget {
   @override
@@ -14,20 +14,20 @@ class PlaceAddPage extends StatefulWidget {
 class _PlaceAddPageState extends State<PlaceAddPage> {
   final storeNameController = TextEditingController();
   final businessNameController = TextEditingController();
+  final categoryController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  // controller 사용시 dispose 필수 구현
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void dispose() {
     storeNameController.dispose();
     businessNameController.dispose();
+    categoryController.dispose();
     super.dispose();
   }
 
-  File? _selectedImage; // 선택한 이미지를 저장할 변수
-  final ImagePicker _picker = ImagePicker();
-
-  // 이미지 선택 함수
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -39,46 +39,45 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('플레이스 등록하기'),
-        ),
-        body: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              // 이미지 선택 영역
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  width: double.infinity,
-                  height: 250,
-                  decoration: BoxDecoration(color: Colors.amber),
-                  child: _selectedImage == null
-                      ? Center(
-                          child: Icon(Icons.add, color: Colors.white, size: 50),
-                        )
-                      : ClipRRect(
-                          child: Image.file(
-                            _selectedImage!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        ),
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('플레이스 등록하기'),
+      ),
+      body: Column(
+        children: [
+          // 이미지 선택 영역 (가로 전체 사용)
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              width: double.infinity,
+              height: 250,
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(0),
               ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              child: _selectedImage == null
+                  ? const Center(
+                      child: Icon(Icons.add, color: Colors.white, size: 50),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(0),
+                      child: Image.file(
+                        _selectedImage!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // 폼 요소들 (패딩 적용)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Form(
+                key: formKey,
+                child: ListView(
                   children: [
-                    // 매장명 입력 필드
+                    // 상호명 필드
                     Row(
                       children: [
                         Text(
@@ -89,7 +88,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                           ),
                         ),
                         Text(
-                          '*',
+                          ' *',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.amber,
@@ -97,9 +96,11 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     StroeNameTextFormField(controller: storeNameController),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
+
+                    // 사업자명 필드
                     Text(
                       '사업자명',
                       style: TextStyle(
@@ -107,26 +108,53 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     BusinessNameTextFormField(
                         controller: businessNameController),
+                    const SizedBox(height: 20),
+
+                    // 카테고리 필드
+                    Row(
+                      children: [
+                        Text(
+                          '카테고리',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          ' *',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.amber,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    CategoryDropdownFormField(controller: categoryController),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(0), // 버튼 여백 추가
-          child: ElevatedButton(
-            onPressed: () {
-              formKey.currentState?.validate();
-            },
-            child: const Text('등록하기'),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(60), // 버튼의 높이 설정
             ),
           ),
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0), // 가로 전체 사용
+        child: ElevatedButton(
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('등록되었습니다!')),
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(60), // 버튼 높이 설정
+          ),
+          child: const Text('등록하기'),
         ),
       ),
     );

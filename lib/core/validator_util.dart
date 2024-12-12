@@ -5,6 +5,13 @@ class ValidatorUtil {
     }
   }
 
+  static String? validatorCategory(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '카테고리를 선택해주세요';
+    }
+    return null;
+  }
+
   static String? ValidatorNickname(String? value) {
     if (value?.trim().isEmpty ?? true) {
       return '닉네임을 입력해주세요';

@@ -1,66 +1,62 @@
 import 'package:flutter/material.dart';
 
 class CategoryDropdownFormField extends StatefulWidget {
+  final TextEditingController controller;
+  final List<String> categories;
+
+  const CategoryDropdownFormField({
+    Key? key,
+    required this.controller,
+    this.categories = const ['숙소', '맛집', '카페', '레저', '기타'],
+  }) : super(key: key);
+
   @override
-  _DataSelectionPageState createState() => _DataSelectionPageState();
+  _CategoryDropdownFormFieldState createState() =>
+      _CategoryDropdownFormFieldState();
 }
 
-class _DataSelectionPageState extends State<CategoryDropdownFormField> {
-  // 선택 가능한 데이터 목록
-  final List<String> categoryList = [
-    '숙소',
-    '맛집',
-    '카페',
-    '레저',
-    '기타',
-  ];
+class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
+  String? dropdownValue;
 
-  // 선택된 값을 저장할 변수
-  String? selectedValue;
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.controller.text.isNotEmpty
+        ? widget.controller.text
+        : null; // 초기값 설정
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Data Selection'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '데이터를 선택하세요',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 20,
-                ),
-                hintText: 'Select an option',
-              ),
-              items: categoryList.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              value: selectedValue,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedValue = value; // 선택된 값 업데이트
-                });
-              },
-            ),
-          ],
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 20,
         ),
       ),
+      value: dropdownValue,
+      items: widget.categories.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue;
+          widget.controller.text = newValue ?? '';
+        });
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '카테고리를 선택해주세요';
+        }
+        return null;
+      },
     );
   }
 }
