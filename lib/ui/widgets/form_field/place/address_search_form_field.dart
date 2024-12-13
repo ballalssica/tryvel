@@ -105,7 +105,7 @@ class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
       readOnly: true, // 검색으로만 입력하도록 설정
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '주소를 입력해주세요.';
+          return '주소를 검색해주세요.';
         }
         return null;
       },

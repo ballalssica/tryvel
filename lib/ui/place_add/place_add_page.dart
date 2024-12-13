@@ -6,8 +6,11 @@ import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dar
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/image_uploder.dart';
 import 'package:tryvel/ui/widgets/form_field/place/operating_hours_form_field.dart';
+import 'package:tryvel/ui/widgets/form_field/place/parking_form_field.dart';
+import 'package:tryvel/ui/widgets/form_field/place/store_description_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.dart';
+import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
 
 class PlaceAddPage extends StatefulWidget {
   @override
@@ -20,7 +23,10 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
   final categoryController = TextEditingController();
   final addressSearchController = TextEditingController();
   final holidayController = TextEditingController();
-  final operatingHoursController = TextEditingController(); // 변수명 수정
+  final operatingHoursController = TextEditingController();
+  final parkingController = TextEditingController();
+  final storeNumbercontroller = TextEditingController();
+  final storeDescrptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
@@ -34,6 +40,9 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
     addressSearchController.dispose();
     holidayController.dispose();
     operatingHoursController.dispose();
+    parkingController.dispose();
+    storeNumbercontroller.dispose();
+    storeDescrptionController.dispose();
     super.dispose();
   }
 
@@ -150,11 +159,60 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                   ),
                   const SizedBox(height: 5),
                   OperatingHoursFormField(controller: operatingHoursController),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '주차가능여부',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  ParkingFormField(controller: parkingController),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '매장 전화번호',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  StoreNumberFormField(controller: storeNumbercontroller),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '매장 소개',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  StoreDescriptionFormField(
+                      controller: storeDescrptionController),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 100),
         ],
       ),
       bottomNavigationBar: RegistrationButton(
