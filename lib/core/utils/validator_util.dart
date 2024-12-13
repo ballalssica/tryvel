@@ -19,6 +19,13 @@ class ValidatorUtil {
     return null;
   }
 
+  static String? validatoroperatingHours(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '운영시간을 알려주세요.';
+    }
+    return null;
+  }
+
   static String? ValidatorNickname(String? value) {
     if (value?.trim().isEmpty ?? true) {
       return '닉네임을 입력해주세요';
