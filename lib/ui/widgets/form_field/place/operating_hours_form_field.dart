@@ -51,12 +51,11 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                   child: TextFormField(
                     keyboardType: TextInputType.number, // 숫자 전용 입력 스타일
                     decoration: InputDecoration(
-                      labelText: '시작 시간',
-                      hintText: _startTime.format(context),
+                      hintText: '시작 시간',
                       border: const OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil
-                        .validatoroperatingHours, // ValidatorUtil 사용
+                        .validatoroperatingHoursStart, // ValidatorUtil 사용
                   ),
                 ),
               ),
@@ -69,25 +68,17 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                   child: TextFormField(
                     keyboardType: TextInputType.number, // 숫자 전용 입력 스타일
                     decoration: InputDecoration(
-                      labelText: '종료 시간',
-                      hintText: _endTime.format(context),
+                      hintText: '종료 시간',
                       border: const OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil
-                        .validatoroperatingHours, // ValidatorUtil 사용
+                        .validatoroperatingHoursEnd, // ValidatorUtil 사용
                   ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        // 입력된 시간 출력
-        if (widget.controller.text.isNotEmpty)
-          Text(
-            '운영시간: ${widget.controller.text}',
-            style: const TextStyle(color: Colors.green),
-          ),
       ],
     );
   }
