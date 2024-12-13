@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tryvel/core/constants/categories.dart';
 
 class CategoryDropdownFormField extends StatefulWidget {
   final TextEditingController controller;
-  final List<String> categories;
 
   const CategoryDropdownFormField({
     Key? key,
     required this.controller,
-    this.categories = const ['숙소', '맛집', '카페', '레저', '기타'],
   }) : super(key: key);
 
   @override
@@ -39,7 +38,7 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
         ),
       ),
       value: dropdownValue,
-      items: widget.categories.map<DropdownMenuItem<String>>((String value) {
+      items: categories.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
