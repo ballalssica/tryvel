@@ -20,7 +20,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
   final categoryController = TextEditingController();
   final addressSearchController = TextEditingController();
   final holidayController = TextEditingController();
-  final OperatingHoursController = TextEditingController();
+  final operatingHoursController = TextEditingController(); // 변수명 수정
   final formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
@@ -33,7 +33,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
     categoryController.dispose();
     addressSearchController.dispose();
     holidayController.dispose();
-    OperatingHoursController.dispose();
+    operatingHoursController.dispose();
     super.dispose();
   }
 
@@ -52,115 +52,109 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
       appBar: AppBar(
         title: const Text('플레이스 등록하기'),
       ),
-      body: Column(
+      body: ListView(
         children: [
-          // 이미지 선택 영역
           ImageUploder(
             selectedImage: _selectedImage,
             onPickImage: _pickImage,
           ),
-          const SizedBox(height: 16),
-          // 폼 요소들
-          Expanded(
+          const SizedBox(height: 20),
+          Form(
+            key: formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Form(
-                key: formKey,
-                child: ListView(
-                  children: [
-                    Row(
-                      children: const [
-                        Text(
-                          '상호명',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        Text(
-                          ' *',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    StoreNameFormField(controller: storeNameController),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: const [
-                        Text(
-                          '카테고리',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        Text(
-                          ' *',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    CategoryDropdownFormField(controller: categoryController),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: const [
-                        Text(
-                          '주소',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        Text(
-                          ' *',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    AddressSearchFormField(
-                      addressController: addressSearchController, // 필수 매개변수 추가
-                      onCoordinatesSaved: (latitude, longitude) {
-                        // 위도와 경도를 처리하는 로직 추가
-                        print('위도: $latitude, 경도: $longitude');
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: const [
-                        Text(
-                          '정기휴일',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        Text(
-                          ' *',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    HolidayFormField(
-                      controller: holidayController,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: const [
-                        Text(
-                          '정기휴일',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        Text(
-                          ' *',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    OperatingHoursFormField(
-                        controller: OperatingHoursController),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: const [
+                      Text(
+                        '상호명',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  StoreNameFormField(controller: storeNameController),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '카테고리',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  CategoryDropdownFormField(controller: categoryController),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '주소',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  AddressSearchFormField(
+                    addressController: addressSearchController,
+                    onCoordinatesSaved: (latitude, longitude) {
+                      print('위도: $latitude, 경도: $longitude');
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '정기휴일',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  HolidayFormField(controller: holidayController),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Text(
+                        '운영시간',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      Text(
+                        ' *',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  OperatingHoursFormField(controller: operatingHoursController),
+                ],
               ),
             ),
           ),
+          const SizedBox(height: 20),
         ],
       ),
       bottomNavigationBar: RegistrationButton(
