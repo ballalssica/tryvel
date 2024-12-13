@@ -38,6 +38,17 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
         ),
       ),
       value: dropdownValue,
+      hint: Text(
+        '업종을 선택해주세요.',
+        style: const TextStyle(
+          fontSize: 15,
+          color: Colors.grey,
+        ),
+      ),
+      icon: const Icon(
+        Icons.arrow_drop_down,
+        color: Colors.grey,
+      ),
       items: categories.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

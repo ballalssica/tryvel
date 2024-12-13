@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/core/utils/validator_util.dart';
 
-class StroeNameTextFormField extends StatelessWidget {
-  StroeNameTextFormField({
+class StoreNameFormField extends StatelessWidget {
+  StoreNameFormField({
     required this.controller,
   });
 

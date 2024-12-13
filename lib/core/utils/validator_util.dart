@@ -12,6 +12,13 @@ class ValidatorUtil {
     return null;
   }
 
+  static String? validatorHoliday(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '휴일유무를 알려주세요.';
+    }
+    return null;
+  }
+
   static String? ValidatorNickname(String? value) {
     if (value?.trim().isEmpty ?? true) {
       return '닉네임을 입력해주세요';

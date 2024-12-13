@@ -90,7 +90,11 @@ class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
     return TextFormField(
       controller: widget.addressController,
       decoration: InputDecoration(
-        hintText: '주소를 검색하세요.',
+        hintText: '주소를 검색해주세요.',
+        hintStyle: TextStyle(
+          fontSize: 15,
+          color: Colors.grey,
+        ),
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
           icon: const Icon(Icons.search),
@@ -124,7 +128,7 @@ class AddressSearchPage extends StatelessWidget {
             // 선택된 주소 예제 (실제 Kakao API 검색 결과 사용)
             Navigator.of(context).pop('서울특별시 강남구 테헤란로');
           },
-          child: const Text('예제 주소 선택'),
+          child: const Text('다음우편번호 API 어렵다 ㅠㅠ'),
         ),
       ),
     );
