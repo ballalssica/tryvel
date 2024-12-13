@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371985841324",
+    "project_id": "tryvel-272b7",
+    "storage_bucket": "tryvel-272b7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371985841324:android:aa465e50017be68f0bb309",
+        "android_client_info": {
+          "package_name": "com.example.tryvel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD90hPYy4paGWUX7fk4BLfGOx2dsHeKpX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
