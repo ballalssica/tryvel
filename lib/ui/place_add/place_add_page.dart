@@ -5,6 +5,7 @@ import 'package:tryvel/ui/place_add/widgets/registration_button%20.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/image_uploder.dart';
+import 'package:tryvel/ui/widgets/form_field/place/operating_hours_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.dart';
 
@@ -19,6 +20,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
   final categoryController = TextEditingController();
   final addressSearchController = TextEditingController();
   final holidayController = TextEditingController();
+  final OperatingHoursController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
@@ -31,6 +33,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
     categoryController.dispose();
     addressSearchController.dispose();
     holidayController.dispose();
+    OperatingHoursController.dispose();
     super.dispose();
   }
 
@@ -122,7 +125,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                     Row(
                       children: const [
                         Text(
-                          '상호명',
+                          '정기휴일',
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         Text(
@@ -136,6 +139,23 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                     HolidayFormField(
                       controller: holidayController,
                     ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: const [
+                        Text(
+                          '정기휴일',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        Text(
+                          ' *',
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    OperatingHoursFormField(
+                        controller: OperatingHoursController),
                   ],
                 ),
               ),
