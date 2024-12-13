@@ -75,50 +75,23 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: const [
-                      Text(
-                        '상호명',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '상호명',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   StoreNameFormField(controller: storeNameController),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '카테고리',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '카테고리',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   CategoryDropdownFormField(controller: categoryController),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '주소',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '주소',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   AddressSearchFormField(
@@ -128,82 +101,37 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '정기휴일',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '정기휴일',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   HolidayFormField(controller: holidayController),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '운영시간',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '운영시간',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   OperatingHoursFormField(controller: operatingHoursController),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '주차가능여부',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '주차가능여부',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   ParkingFormField(controller: parkingController),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '매장 전화번호',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '매장 전화번호',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   StoreNumberFormField(controller: storeNumbercontroller),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
-                      Text(
-                        '매장 소개',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        ' *',
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xFFFFA000)),
-                      ),
-                    ],
+                  Text(
+                    '매장 소개',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
                   StoreDescriptionFormField(

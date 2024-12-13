@@ -16,7 +16,7 @@ class StoreDescriptionFormField extends StatelessWidget {
       maxLines: null, // 줄 수 제한 없음
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-        hintText: '매장을 소개해주세요.',
+        hintText: '우리매장의 매력포인트를 어필해주세요~',
       ),
       validator: ValidatorUtil.validatorStoreDiscription,
       scrollPhysics: BouncingScrollPhysics(), // 스크롤 가능하도록 설정
