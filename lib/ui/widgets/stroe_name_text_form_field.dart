@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/core/validator_util.dart';
+import 'package:tryvel/core/utils/validator_util.dart';
 
 class StroeNameTextFormField extends StatelessWidget {
   StroeNameTextFormField({
