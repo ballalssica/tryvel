@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:tryvel/ui/place_add/widgets/registration_button%20.dart';
+import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/image_uploder.dart';
@@ -143,7 +143,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
           const SizedBox(height: 100),
         ],
       ),
-      bottomNavigationBar: RegistrationButton(
+      bottomNavigationBar: Bottombutton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
             ScaffoldMessenger.of(context).showSnackBar(

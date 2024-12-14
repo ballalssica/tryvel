@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/firebase_options.dart';
-import 'package:tryvel/ui/place_add/place_add_page.dart';
+import 'package:tryvel/ui/place/place_add/place_add_page.dart';
+import 'package:tryvel/ui/place/place_update/place_update_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
