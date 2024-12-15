@@ -3,10 +3,12 @@ import 'package:tryvel/core/constants/categories.dart';
 
 class CategoryDropdownFormField extends StatefulWidget {
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged; // onChanged 매개변수 추가
 
   const CategoryDropdownFormField({
     Key? key,
     required this.controller,
+    this.onChanged, // onChanged 전달
   }) : super(key: key);
 
   @override
@@ -38,9 +40,9 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
         ),
       ),
       value: dropdownValue,
-      hint: Text(
+      hint: const Text(
         '업종을 선택해주세요.',
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 15,
           color: Colors.grey,
         ),
@@ -59,6 +61,11 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
         setState(() {
           dropdownValue = newValue;
           widget.controller.text = newValue ?? '';
+
+          // onChanged 콜백 호출
+          if (widget.onChanged != null && newValue != null) {
+            widget.onChanged!(newValue);
+          }
         });
       },
       validator: (value) {

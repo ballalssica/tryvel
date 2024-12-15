@@ -3,9 +3,13 @@ import 'package:tryvel/core/utils/validator_util.dart';
 
 class OperatingHoursFormField extends StatefulWidget {
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged; // 부모와 상태 동기화를 위한 콜백 추가
 
-  const OperatingHoursFormField({Key? key, required this.controller})
-      : super(key: key);
+  const OperatingHoursFormField({
+    Key? key,
+    required this.controller,
+    this.onChanged,
+  }) : super(key: key);
 
   @override
   _OperatingHoursFormFieldState createState() =>
@@ -13,8 +17,17 @@ class OperatingHoursFormField extends StatefulWidget {
 }
 
 class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
-  String? _startTime; // 시작 시간 초기값 없음
-  String? _endTime; // 종료 시간 초기값 없음
+  String? _startTime; // 시작 시간
+  String? _endTime; // 종료 시간
+
+  @override
+  void initState() {
+    super.initState();
+    // 컨트롤러 값에서 초기 시간 파싱
+    final times = widget.controller.text.split('~');
+    _startTime = times.isNotEmpty ? times[0].trim() : null;
+    _endTime = times.length > 1 ? times[1].trim() : null;
+  }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final pickedTime = await showTimePicker(
@@ -33,6 +46,11 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
 
         // 컨트롤러에 값 저장
         widget.controller.text = '${_startTime ?? ''} ~ ${_endTime ?? ''}';
+
+        // 부모 위젯에 변경 사항 알림
+        if (widget.onChanged != null) {
+          widget.onChanged!(widget.controller.text);
+        }
       });
     }
   }
@@ -57,9 +75,9 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                 child: AbsorbPointer(
                   child: TextFormField(
                     controller: TextEditingController(text: _startTime ?? ''),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: '시작 시간',
-                      border: const OutlineInputBorder(),
+                      border: OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil.validatoroperatingHoursStart,
                   ),
@@ -73,9 +91,9 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                 child: AbsorbPointer(
                   child: TextFormField(
                     controller: TextEditingController(text: _endTime ?? ''),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: '종료 시간',
-                      border: const OutlineInputBorder(),
+                      border: OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil.validatoroperatingHoursEnd,
                   ),

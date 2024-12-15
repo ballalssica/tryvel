@@ -41,6 +41,7 @@ class PlaceRepository {
     required String close, // 00:00 형식
     required String tel,
     required String description,
+    String? imageUrl,
   }) async {
     try {
       final firestore = FirebaseFirestore.instance;
@@ -57,6 +58,7 @@ class PlaceRepository {
         'close': close, // 문자열로 저장
         'tel': tel,
         'description': description,
+        'imageUrl': imageUrl,
       });
       return true;
     } catch (e) {
@@ -98,6 +100,7 @@ Future<bool> update({
   required String close,
   required String tel,
   required String description,
+  String? imageUrl,
 }) async {
   try {
     // 1) 파이어스토어 인스턴스 가지고 오기
@@ -116,6 +119,7 @@ Future<bool> update({
       'close': close,
       'tel': tel,
       'description': description,
+      'imageUrl': imageUrl,
     });
     return true;
   } catch (e) {

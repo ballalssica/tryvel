@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Riverpod 사용
 import 'package:image_picker/image_picker.dart';
-import 'package:tryvel/data/repository/place_repository.dart'; // PlaceRepository 가져오기
+import 'package:tryvel/ui/place/place_add/placeAddViewModelProvider.dart';
+import 'package:tryvel/ui/place/place_add/place_add_view_model.dart'; // ViewModel 임포트
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
@@ -13,160 +14,164 @@ import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
 
-class PlaceAddPage extends StatefulWidget {
+class PlaceAddPage extends ConsumerWidget {
   @override
-  _PlaceAddPageState createState() => _PlaceAddPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModelManager = ref.watch(placeAddViewModelProvider.notifier);
+    final state = ref.watch(placeAddViewModelProvider);
 
-class _PlaceAddPageState extends State<PlaceAddPage> {
-  final storeNameController = TextEditingController();
-  final categoryController = TextEditingController();
-  final addressSearchController = TextEditingController();
-  final holidayController = TextEditingController();
-  final operatingHoursController = TextEditingController();
-  final parkingController = TextEditingController();
-  final storeNumbercontroller = TextEditingController();
-  final storeDescrptionController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-
-  XFile? _selectedImage; // 선택된 이미지 상태 관리
-  final ImagePicker _picker = ImagePicker();
-  final PlaceRepository _placeRepository =
-      PlaceRepository(); // PlaceRepository 인스턴스
-
-  @override
-  void dispose() {
-    storeNameController.dispose();
-    categoryController.dispose();
-    addressSearchController.dispose();
-    holidayController.dispose();
-    operatingHoursController.dispose();
-    parkingController.dispose();
-    storeNumbercontroller.dispose();
-    storeDescrptionController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _savePlace() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        // 운영시간 파싱 및 검증
-        final operatingHours = operatingHoursController.text.split('~');
-        final openTime =
-            operatingHours.isNotEmpty ? operatingHours[0].trim() : ''; // 시작 시간
-        final closeTime =
-            operatingHours.length > 1 ? operatingHours[1].trim() : ''; // 종료 시간
-
-        // Firestore에 데이터 저장
-        final success = await _placeRepository.insert(
-          name: storeNameController.text,
-          category: categoryController.text,
-          address: addressSearchController.text,
-          holiday: holidayController.text,
-          open: openTime, // 문자열로 저장
-          close: closeTime, // 문자열로 저장
-          tel: storeNumbercontroller.text,
-          description: storeDescrptionController.text,
-        );
-
-        if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('등록되었습니다!')),
-          );
-          Navigator.pop(context); // 저장 후 페이지 종료
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('등록에 실패했습니다. 다시 시도해주세요.')),
-          );
-        }
-      } catch (e) {
-        // 예외 처리
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('운영시간 입력 형식이 잘못되었습니다.')),
-        );
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('플레이스 등록하기'),
       ),
       body: ListView(
         children: [
-          // ImageUploader 위젯에 onImageSelected 전달
+          // 이미지 업로드 위젯
           ImageUploader(
-            selectedImage: _selectedImage, // 현재 선택된 이미지 전달
+            selectedImage: state.selectedImage,
             onImageSelected: (XFile image) {
-              setState(() {
-                _selectedImage = image; // 선택된 이미지 업데이트
-              });
+              viewModelManager.pickImage(); // ViewModelManager를 통해 이미지 처리
             },
           ),
           const SizedBox(height: 20),
           Form(
-            key: formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('상호명',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+                  // 상호명 입력 필드
+                  const Text(
+                    '상호명',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  StoreNameFormField(controller: storeNameController),
+                  StoreNameFormField(
+                    controller: TextEditingController(
+                      text: state.storeName,
+                    ),
+                    onChanged: viewModelManager.updateStoreName,
+                  ),
                   const SizedBox(height: 20),
-                  Text('카테고리',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 카테고리 입력 필드
+                  const Text(
+                    '카테고리',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  CategoryDropdownFormField(controller: categoryController),
+                  CategoryDropdownFormField(
+                    controller: TextEditingController(
+                      text: state.category,
+                    ),
+                    onChanged: viewModelManager.updateCategory,
+                  ),
                   const SizedBox(height: 20),
-                  Text('주소',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 주소 입력 필드
+                  const Text(
+                    '주소',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
                   AddressSearchFormField(
-                    addressController: addressSearchController,
+                    addressController: TextEditingController(
+                      text: state.address,
+                    ),
                     onCoordinatesSaved: (latitude, longitude) {
-                      print('위도: $latitude, 경도: $longitude');
+                      viewModelManager.updateAddress('$latitude, $longitude');
                     },
                   ),
                   const SizedBox(height: 20),
-                  Text('정기휴일',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 정기휴일 입력 필드
+                  const Text(
+                    '정기휴일',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  HolidayFormField(controller: holidayController),
+                  HolidayFormField(
+                    controller: TextEditingController(
+                      text: state.holiday,
+                    ),
+                    onChanged: viewModelManager.updateHoliday,
+                  ),
                   const SizedBox(height: 20),
-                  Text('운영시간',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 운영시간 입력 필드
+                  const Text(
+                    '운영시간',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  OperatingHoursFormField(controller: operatingHoursController),
+                  OperatingHoursFormField(
+                    controller: TextEditingController(
+                      text: state.operatingHours,
+                    ),
+                    onChanged: viewModelManager.updateOperatingHours,
+                  ),
                   const SizedBox(height: 20),
-                  Text('주차가능여부',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 주차 가능 여부
+                  const Text(
+                    '주차가능여부',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  ParkingFormField(controller: parkingController),
+                  ParkingFormField(
+                    controller: TextEditingController(
+                      text: state.parking,
+                    ),
+                    onChanged: viewModelManager.updateParking,
+                  ),
                   const SizedBox(height: 20),
-                  Text('매장 전화번호',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 매장 전화번호 입력 필드
+                  const Text(
+                    '매장 전화번호',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
-                  StoreNumberFormField(controller: storeNumbercontroller),
+                  StoreNumberFormField(
+                    controller: TextEditingController(
+                      text: state.storeNumber,
+                    ),
+                    onChanged: viewModelManager.updateStoreNumber,
+                  ),
                   const SizedBox(height: 20),
-                  Text('매장 소개',
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+                  // 매장 소개 입력 필드
+                  const Text(
+                    '매장 소개',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
                   StoreDescriptionFormField(
-                      controller: storeDescrptionController),
+                    controller: TextEditingController(
+                      text: state.description,
+                    ),
+                    onChanged: viewModelManager.updateDescription,
+                  ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 100),
         ],
       ),
       bottomNavigationBar: Bottombutton(
-        onPressed: _savePlace, // 저장 버튼 클릭 시 _savePlace 호출
+        onPressed: () async {
+          final success = await viewModelManager.savePlace();
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('등록되었습니다!')),
+            );
+            Navigator.pop(context);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('등록에 실패했습니다. 다시 시도해주세요.')),
+            );
+          }
+        },
         label: '등록하기',
       ),
     );
