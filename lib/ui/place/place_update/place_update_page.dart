@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
@@ -13,37 +14,99 @@ import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.
 import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
 
 class PlaceUpdatePage extends StatefulWidget {
+  final String placeId;
+
+  const PlaceUpdatePage({Key? key, required this.placeId}) : super(key: key);
+
   @override
-  _PlaceAddPageState createState() => _PlaceAddPageState();
+  _PlaceUpdatePageState createState() => _PlaceUpdatePageState();
 }
 
-class _PlaceAddPageState extends State<PlaceUpdatePage> {
+class _PlaceUpdatePageState extends State<PlaceUpdatePage> {
   final storeNameController = TextEditingController();
-  final businessNameController = TextEditingController();
   final categoryController = TextEditingController();
   final addressSearchController = TextEditingController();
   final holidayController = TextEditingController();
   final operatingHoursController = TextEditingController();
   final parkingController = TextEditingController();
-  final storeNumbercontroller = TextEditingController();
-  final storeDescrptionController = TextEditingController();
+  final storeNumberController = TextEditingController();
+  final storeDescriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
   @override
+  void initState() {
+    super.initState();
+    _fetchPlaceData(); // Firestore에서 데이터 가져오기
+  }
+
+  @override
   void dispose() {
     storeNameController.dispose();
-    businessNameController.dispose();
     categoryController.dispose();
     addressSearchController.dispose();
     holidayController.dispose();
     operatingHoursController.dispose();
     parkingController.dispose();
-    storeNumbercontroller.dispose();
-    storeDescrptionController.dispose();
+    storeNumberController.dispose();
+    storeDescriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchPlaceData() async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final docSnapshot =
+          await firestore.collection('place').doc(widget.placeId).get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null) {
+          setState(() {
+            storeNameController.text = data['name'] ?? '';
+            categoryController.text = data['category'] ?? '';
+            addressSearchController.text = data['address'] ?? '';
+            holidayController.text = data['holiday'] ?? '';
+            operatingHoursController.text =
+                '${data['open'] ?? ''} ~ ${data['close'] ?? ''}';
+            parkingController.text = data['parking'] ?? '';
+            storeNumberController.text = data['tel'] ?? '';
+            storeDescriptionController.text = data['description'] ?? '';
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching place data: $e');
+    }
+  }
+
+  Future<void> _updatePlace() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        final firestore = FirebaseFirestore.instance;
+        await firestore.collection('place').doc(widget.placeId).update({
+          'name': storeNameController.text,
+          'category': categoryController.text,
+          'address': addressSearchController.text,
+          'holiday': holidayController.text,
+          'open': operatingHoursController.text.split('~')[0].trim(),
+          'close': operatingHoursController.text.split('~')[1].trim(),
+          'parking': parkingController.text,
+          'tel': storeNumberController.text,
+          'description': storeDescriptionController.text,
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('수정되었습니다!')),
+        );
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('수정에 실패했습니다. 다시 시도해주세요.')),
+        );
+      }
+    }
   }
 
   Future<void> _pickImage() async {
@@ -127,7 +190,7 @@ class _PlaceAddPageState extends State<PlaceUpdatePage> {
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 5),
-                  StoreNumberFormField(controller: storeNumbercontroller),
+                  StoreNumberFormField(controller: storeNumberController),
                   const SizedBox(height: 20),
                   Text(
                     '매장 소개',
@@ -135,7 +198,7 @@ class _PlaceAddPageState extends State<PlaceUpdatePage> {
                   ),
                   const SizedBox(height: 5),
                   StoreDescriptionFormField(
-                      controller: storeDescrptionController),
+                      controller: storeDescriptionController),
                 ],
               ),
             ),
@@ -144,13 +207,7 @@ class _PlaceAddPageState extends State<PlaceUpdatePage> {
         ],
       ),
       bottomNavigationBar: Bottombutton(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('등록되었습니다!')),
-            );
-          }
-        },
+        onPressed: _updatePlace, // 수정 버튼 클릭 시 업데이트 함수 호출
         label: '수정하기',
       ),
     );
