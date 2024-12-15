@@ -1,39 +1,51 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-class ImageUploder extends StatelessWidget {
-  final File? selectedImage;
-  final VoidCallback onPickImage;
+class ImageUploader extends StatelessWidget {
+  final XFile? selectedImage;
+  final Function(XFile) onImageSelected;
 
-  const ImageUploder({
+  const ImageUploader({
     Key? key,
-    required this.selectedImage,
-    required this.onPickImage,
+    this.selectedImage,
+    required this.onImageSelected,
   }) : super(key: key);
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+    try {
+      final XFile? pickedFile =
+          await imagePicker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        onImageSelected(pickedFile);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPickImage,
+      onTap: () => _pickImage(context),
       child: Container(
         width: double.infinity,
         height: 250,
         decoration: BoxDecoration(
           color: Colors.amber,
-          borderRadius: BorderRadius.circular(0),
+          image: selectedImage != null
+              ? DecorationImage(
+                  image: FileImage(File(selectedImage!.path)),
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
         child: selectedImage == null
             ? const Center(
                 child: Icon(Icons.add, color: Colors.white, size: 50),
               )
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(0),
-                child: Image.file(
-                  selectedImage!,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            : null,
       ),
     );
   }

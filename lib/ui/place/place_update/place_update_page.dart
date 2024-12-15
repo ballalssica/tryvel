@@ -33,13 +33,13 @@ class _PlaceUpdatePageState extends State<PlaceUpdatePage> {
   final storeDescriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  File? _selectedImage;
+  XFile? _selectedImage; // 선택된 이미지 상태 관리
   final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    _fetchPlaceData(); // Firestore에서 데이터 가져오기
+    _fetchPlaceData();
   }
 
   @override
@@ -109,15 +109,6 @@ class _PlaceUpdatePageState extends State<PlaceUpdatePage> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,9 +117,13 @@ class _PlaceUpdatePageState extends State<PlaceUpdatePage> {
       ),
       body: ListView(
         children: [
-          ImageUploder(
-            selectedImage: _selectedImage,
-            onPickImage: _pickImage,
+          ImageUploader(
+            selectedImage: _selectedImage, // 현재 선택된 이미지 전달
+            onImageSelected: (image) {
+              setState(() {
+                _selectedImage = image; // 선택된 이미지 업데이트
+              });
+            },
           ),
           const SizedBox(height: 20),
           Form(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:tryvel/data/model/place.dart';
 import 'package:tryvel/data/repository/place_repository.dart'; // PlaceRepository 가져오기
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
@@ -30,7 +29,7 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
   final storeDescrptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  File? _selectedImage;
+  XFile? _selectedImage; // 선택된 이미지 상태 관리
   final ImagePicker _picker = ImagePicker();
   final PlaceRepository _placeRepository =
       PlaceRepository(); // PlaceRepository 인스턴스
@@ -46,15 +45,6 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
     storeNumbercontroller.dispose();
     storeDescrptionController.dispose();
     super.dispose();
-  }
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
   }
 
   Future<void> _savePlace() async {
@@ -106,9 +96,14 @@ class _PlaceAddPageState extends State<PlaceAddPage> {
       ),
       body: ListView(
         children: [
-          ImageUploder(
-            selectedImage: _selectedImage,
-            onPickImage: _pickImage,
+          // ImageUploader 위젯에 onImageSelected 전달
+          ImageUploader(
+            selectedImage: _selectedImage, // 현재 선택된 이미지 전달
+            onImageSelected: (XFile image) {
+              setState(() {
+                _selectedImage = image; // 선택된 이미지 업데이트
+              });
+            },
           ),
           const SizedBox(height: 20),
           Form(
