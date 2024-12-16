@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Riverpod 사용
-import 'package:image_picker/image_picker.dart';
 import 'package:tryvel/ui/place/place_add/placeAddViewModelProvider.dart';
-import 'package:tryvel/ui/place/place_add/place_add_view_model.dart'; // ViewModel 임포트
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/image_uploder.dart';
+import 'package:tryvel/ui/widgets/form_field/place/image_uploader.dart';
 import 'package:tryvel/ui/widgets/form_field/place/operating_hours_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/parking_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_description_form_field.dart';
@@ -28,9 +26,9 @@ class PlaceAddPage extends ConsumerWidget {
         children: [
           // 이미지 업로드 위젯
           ImageUploader(
-            selectedImage: state.selectedImage,
-            onImageSelected: (XFile image) {
-              viewModelManager.pickImage(); // ViewModelManager를 통해 이미지 처리
+            imageUrl: state.imageUrl, // 업로드된 URL로 이미지 표시
+            onImageSelected: () async {
+              await viewModelManager.pickImage(); // 이미지 선택 및 업로드 처리
             },
           ),
           const SizedBox(height: 20),
@@ -40,7 +38,6 @@ class PlaceAddPage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 상호명 입력 필드
                   const Text(
                     '상호명',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -53,8 +50,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateStoreName,
                   ),
                   const SizedBox(height: 20),
-
-                  // 카테고리 입력 필드
                   const Text(
                     '카테고리',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -67,8 +62,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateCategory,
                   ),
                   const SizedBox(height: 20),
-
-                  // 주소 입력 필드
                   const Text(
                     '주소',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -83,8 +76,6 @@ class PlaceAddPage extends ConsumerWidget {
                     },
                   ),
                   const SizedBox(height: 20),
-
-                  // 정기휴일 입력 필드
                   const Text(
                     '정기휴일',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -97,8 +88,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateHoliday,
                   ),
                   const SizedBox(height: 20),
-
-                  // 운영시간 입력 필드
                   const Text(
                     '운영시간',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -111,8 +100,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateOperatingHours,
                   ),
                   const SizedBox(height: 20),
-
-                  // 주차 가능 여부
                   const Text(
                     '주차가능여부',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -125,8 +112,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateParking,
                   ),
                   const SizedBox(height: 20),
-
-                  // 매장 전화번호 입력 필드
                   const Text(
                     '매장 전화번호',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -139,8 +124,6 @@ class PlaceAddPage extends ConsumerWidget {
                     onChanged: viewModelManager.updateStoreNumber,
                   ),
                   const SizedBox(height: 20),
-
-                  // 매장 소개 입력 필드
                   const Text(
                     '매장 소개',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -152,6 +135,7 @@ class PlaceAddPage extends ConsumerWidget {
                     ),
                     onChanged: viewModelManager.updateDescription,
                   ),
+                  const SizedBox(height: 200),
                 ],
               ),
             ),

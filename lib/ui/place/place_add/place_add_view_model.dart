@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 
-// 상태 클래스
 class PlaceAddState {
   final String storeName;
   final String category;
@@ -15,7 +13,7 @@ class PlaceAddState {
   final String parking;
   final String storeNumber;
   final String description;
-  final XFile? selectedImage;
+  final String? imageUrl;
 
   PlaceAddState({
     this.storeName = '',
@@ -26,7 +24,7 @@ class PlaceAddState {
     this.parking = '',
     this.storeNumber = '',
     this.description = '',
-    this.selectedImage,
+    this.imageUrl,
   });
 
   PlaceAddState copyWith({
@@ -38,7 +36,7 @@ class PlaceAddState {
     String? parking,
     String? storeNumber,
     String? description,
-    XFile? selectedImage,
+    String? imageUrl,
   }) {
     return PlaceAddState(
       storeName: storeName ?? this.storeName,
@@ -49,50 +47,44 @@ class PlaceAddState {
       parking: parking ?? this.parking,
       storeNumber: storeNumber ?? this.storeNumber,
       description: description ?? this.description,
-      selectedImage: selectedImage ?? this.selectedImage,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }
 
-// ViewModel 클래스
 class PlaceAddViewModel extends StateNotifier<PlaceAddState> {
   final PlaceRepository _placeRepository = PlaceRepository();
 
   PlaceAddViewModel() : super(PlaceAddState());
 
-  // 이미지 선택
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedImage =
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      state = state.copyWith(selectedImage: pickedImage);
+      final imageUrl = await uploadImage(pickedImage);
+      if (imageUrl != null) {
+        state = state.copyWith(imageUrl: imageUrl);
+      }
     }
   }
 
-  // 이미지 업로드 및 URL 반환
   Future<String?> uploadImage(XFile image) async {
     try {
-      final String fileName = basename(image.path); // 파일 이름 추출
-      final Reference storageRef = FirebaseStorage.instance
-          .ref()
-          .child('places/$fileName'); // Firebase Storage 경로 설정
+      final storage = FirebaseStorage.instance;
+      final String fileName =
+          '${DateTime.now().millisecondsSinceEpoch}_${image.name}';
+      final Reference storageRef = storage.ref().child('places/$fileName');
       final UploadTask uploadTask = storageRef.putFile(File(image.path));
       final TaskSnapshot snapshot = await uploadTask;
-      return await snapshot.ref.getDownloadURL(); // 업로드된 파일의 URL 반환
+      return await snapshot.ref.getDownloadURL();
     } catch (e) {
       print('이미지 업로드 실패: $e');
       return null;
     }
   }
 
-  // 데이터 저장
   Future<bool> savePlace() async {
-    String? imageUrl;
-    if (state.selectedImage != null) {
-      imageUrl = await uploadImage(state.selectedImage!); // 이미지 업로드 및 URL 가져오기
-    }
-
     final operatingHours = state.operatingHours.split('~');
     final openTime = operatingHours.isNotEmpty ? operatingHours[0].trim() : '';
     final closeTime = operatingHours.length > 1 ? operatingHours[1].trim() : '';
@@ -106,11 +98,10 @@ class PlaceAddViewModel extends StateNotifier<PlaceAddState> {
       close: closeTime,
       tel: state.storeNumber,
       description: state.description,
-      imageUrl: imageUrl, // 업로드된 이미지의 URL 저장
+      imageUrl: state.imageUrl,
     );
   }
 
-  // 상태 업데이트 메서드
   void updateStoreName(String value) {
     state = state.copyWith(storeName: value);
   }
