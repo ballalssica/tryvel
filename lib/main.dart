@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tryvel/firebase_options.dart';
 import 'package:tryvel/ui/home/home_page.dart';
-import 'package:tryvel/ui/place/place_add/place_add_view_model.dart'; // ViewModelManager 임포트
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,32 +34,32 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.amber,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+            foregroundColor: WidgetStateProperty.resolveWith<Color?>(
               (states) {
-                if (states.contains(MaterialState.disabled)) {
+                if (states.contains(WidgetState.disabled)) {
                   return const Color(0xFFD6D6D6);
                 }
                 return Colors.white;
               },
             ),
-            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            backgroundColor: WidgetStateProperty.resolveWith<Color?>(
               (states) {
-                if (states.contains(MaterialState.disabled)) {
+                if (states.contains(WidgetState.disabled)) {
                   return const Color(0xFF4A4A4A);
                 }
                 return Colors.amber;
               },
             ),
-            minimumSize: MaterialStateProperty.all(
+            minimumSize: WidgetStateProperty.all(
               const Size.fromHeight(60),
             ),
-            textStyle: MaterialStateProperty.all(
+            textStyle: WidgetStateProperty.all(
               const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            shape: MaterialStateProperty.all(
+            shape: WidgetStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0),
               ),
