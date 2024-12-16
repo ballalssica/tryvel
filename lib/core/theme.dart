@@ -10,37 +10,40 @@ class AppTheme {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
+        iconTheme: IconThemeData(
+          color: Colors.amber, // 뒤로가기 아이콘 색상을 앰버로 설정
+        ),
       ),
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
       highlightColor: Colors.amber,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
             (states) {
-              if (states.contains(MaterialState.disabled)) {
+              if (states.contains(WidgetState.disabled)) {
                 return const Color(0xFFD6D6D6);
               }
               return Colors.white;
             },
           ),
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
             (states) {
-              if (states.contains(MaterialState.disabled)) {
+              if (states.contains(WidgetState.disabled)) {
                 return const Color(0xFF4A4A4A);
               }
               return Colors.amber;
             },
           ),
-          minimumSize: MaterialStateProperty.all(
+          minimumSize: WidgetStateProperty.all(
             const Size.fromHeight(60),
           ),
-          textStyle: MaterialStateProperty.all(
+          textStyle: WidgetStateProperty.all(
             const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0),
             ),
