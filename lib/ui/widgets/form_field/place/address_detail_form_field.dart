@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/core/utils/validator_util.dart';
 
 class AddressDetailFormField extends StatefulWidget {
   final TextEditingController controller; // 컨트롤러
