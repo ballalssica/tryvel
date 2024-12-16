@@ -25,14 +25,21 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
     super.initState();
     // 컨트롤러 값에서 초기 시간 파싱
     final times = widget.controller.text.split('~');
-    _startTime = times.isNotEmpty ? times[0].trim() : null;
-    _endTime = times.length > 1 ? times[1].trim() : null;
+    _startTime =
+        times.isNotEmpty && times[0].trim().isNotEmpty ? times[0].trim() : null;
+    _endTime =
+        times.length > 1 && times[1].trim().isNotEmpty ? times[1].trim() : null;
   }
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final initialTime = TimeOfDay(
+      hour: 0,
+      minute: 0,
+    ); // 초기값 00:00
+
     final pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: initialTime,
     );
 
     if (pickedTime != null) {
@@ -74,10 +81,11 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                 onTap: () => _selectTime(context, true),
                 child: AbsorbPointer(
                   child: TextFormField(
-                    controller: TextEditingController(text: _startTime ?? ''),
-                    decoration: const InputDecoration(
-                      hintText: '시작 시간',
-                      border: OutlineInputBorder(),
+                    controller: TextEditingController(
+                        text: _startTime ?? ''), // 시작 시간 표시
+                    decoration: InputDecoration(
+                      hintText: _startTime ?? '시작 시간', // null일 경우 힌트텍스트
+                      border: const OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil.validatoroperatingHoursStart,
                   ),
@@ -90,10 +98,11 @@ class _OperatingHoursFormFieldState extends State<OperatingHoursFormField> {
                 onTap: () => _selectTime(context, false),
                 child: AbsorbPointer(
                   child: TextFormField(
-                    controller: TextEditingController(text: _endTime ?? ''),
-                    decoration: const InputDecoration(
-                      hintText: '종료 시간',
-                      border: OutlineInputBorder(),
+                    controller:
+                        TextEditingController(text: _endTime ?? ''), // 종료 시간 표시
+                    decoration: InputDecoration(
+                      hintText: _endTime ?? '종료 시간', // null일 경우 힌트텍스트
+                      border: const OutlineInputBorder(),
                     ),
                     validator: ValidatorUtil.validatoroperatingHoursEnd,
                   ),

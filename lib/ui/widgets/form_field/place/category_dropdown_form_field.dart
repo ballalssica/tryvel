@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/core/constants/categories.dart';
+import 'package:tryvel/core/utils/validator_util.dart';
 
 class CategoryDropdownFormField extends StatefulWidget {
   final TextEditingController controller;
-  final ValueChanged<String>? onChanged; // onChanged 매개변수 추가
+  final ValueChanged<String>? onChanged;
 
   const CategoryDropdownFormField({
     Key? key,
     required this.controller,
-    this.onChanged, // onChanged 전달
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -22,9 +23,21 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = widget.controller.text.isNotEmpty
-        ? widget.controller.text
-        : null; // 초기값 설정
+    // 컨트롤러의 값으로 초기화
+    dropdownValue =
+        widget.controller.text.isNotEmpty ? widget.controller.text : null;
+  }
+
+  @override
+  void didUpdateWidget(CategoryDropdownFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 컨트롤러 값이 업데이트되면 드롭다운 값 동기화
+    if (widget.controller.text != dropdownValue) {
+      setState(() {
+        dropdownValue =
+            widget.controller.text.isNotEmpty ? widget.controller.text : null;
+      });
+    }
   }
 
   @override
@@ -61,19 +74,12 @@ class _CategoryDropdownFormFieldState extends State<CategoryDropdownFormField> {
         setState(() {
           dropdownValue = newValue;
           widget.controller.text = newValue ?? '';
-
-          // onChanged 콜백 호출
           if (widget.onChanged != null && newValue != null) {
             widget.onChanged!(newValue);
           }
         });
       },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '카테고리를 선택해주세요';
-        }
-        return null;
-      },
+      validator: (value) => ValidatorUtil.validatorCategory(value),
     );
   }
 }
