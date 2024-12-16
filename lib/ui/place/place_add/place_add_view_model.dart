@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
-import 'package:tryvel/core/utils/view_model_util.dart';
 
 /// PlaceAddState 클래스 - 상태 관리
 class PlaceAddState {
@@ -60,11 +59,14 @@ class PlaceAddState {
 }
 
 /// PlaceAddViewModel 클래스 - 비즈니스 로직 관리
-class PlaceAddViewModel {
+class PlaceAddViewModel extends ChangeNotifier {
   final PlaceRepository _placeRepository = PlaceRepository();
-  PlaceAddState state = PlaceAddState();
+  PlaceAddState _state = PlaceAddState();
 
-  // TextEditingController 정의
+  /// 상태 Getter
+  PlaceAddState get state => _state;
+
+  /// TextEditingController 정의
   final storeNameController = TextEditingController();
   final categoryController = TextEditingController();
   final addressController = TextEditingController();
@@ -75,19 +77,50 @@ class PlaceAddViewModel {
   final storeNumberController = TextEditingController();
   final storeDescriptionController = TextEditingController();
 
-  /// 초기 상태를 컨트롤러에 설정
-  void initializeControllers(Map<String, dynamic> data) {
-    ViewModelUtil.populateControllersFromMap(
-      data,
-      storeNameController: storeNameController,
-      categoryController: categoryController,
-      addressController: addressController,
-      holidayController: holidayController,
-      operatingHoursController: operatingHoursController,
-      parkingController: parkingController,
-      storeNumberController: storeNumberController,
-      storeDescriptionController: storeDescriptionController,
-    );
+  /// 상태 업데이트 메서드들
+  void updateStoreName(String value) {
+    _state = _state.copyWith(storeName: value);
+    notifyListeners();
+  }
+
+  void updateCategory(String value) {
+    _state = _state.copyWith(category: value);
+    notifyListeners();
+  }
+
+  void updateAddress(String value) {
+    _state = _state.copyWith(address: value);
+    notifyListeners();
+  }
+
+  void updateAddressDetail(String value) {
+    _state = _state.copyWith(addressDetail: value);
+    notifyListeners();
+  }
+
+  void updateHoliday(String value) {
+    _state = _state.copyWith(holiday: value);
+    notifyListeners();
+  }
+
+  void updateOperatingHours(String value) {
+    _state = _state.copyWith(operatingHours: value);
+    notifyListeners();
+  }
+
+  void updateParking(String value) {
+    _state = _state.copyWith(parking: value);
+    notifyListeners();
+  }
+
+  void updateStoreNumber(String value) {
+    _state = _state.copyWith(storeNumber: value);
+    notifyListeners();
+  }
+
+  void updateDescription(String value) {
+    _state = _state.copyWith(description: value);
+    notifyListeners();
   }
 
   /// 이미지 선택 및 업로드
@@ -96,15 +129,16 @@ class PlaceAddViewModel {
     final XFile? pickedImage =
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      final imageUrl = await uploadImage(pickedImage);
+      final imageUrl = await _uploadImage(pickedImage);
       if (imageUrl != null) {
-        state = state.copyWith(imageUrl: imageUrl);
+        _state = _state.copyWith(imageUrl: imageUrl);
+        notifyListeners(); // 상태 변경 알림
       }
     }
   }
 
   /// 이미지 업로드 메서드
-  Future<String?> uploadImage(XFile image) async {
+  Future<String?> _uploadImage(XFile image) async {
     try {
       final storage = FirebaseStorage.instance;
       final String fileName =
@@ -121,37 +155,21 @@ class PlaceAddViewModel {
 
   /// 플레이스 데이터 저장
   Future<bool> savePlace() async {
-    final operatingHours = state.operatingHours.split('~');
+    final operatingHours = _state.operatingHours.split('~');
     final openTime = operatingHours.isNotEmpty ? operatingHours[0].trim() : '';
     final closeTime = operatingHours.length > 1 ? operatingHours[1].trim() : '';
 
     return await _placeRepository.insert(
-      name: state.storeName,
-      category: state.category,
-      address: state.address,
-      addressDetail: state.addressDetail, // 추가
-      holiday: state.holiday,
+      name: _state.storeName,
+      category: _state.category,
+      address: _state.address,
+      addressDetail: _state.addressDetail,
+      holiday: _state.holiday,
       open: openTime,
       close: closeTime,
-      tel: state.storeNumber,
-      description: state.description,
-      imageUrl: state.imageUrl,
+      tel: _state.storeNumber,
+      description: _state.description,
+      imageUrl: _state.imageUrl,
     );
   }
-
-  /// 상태 업데이트 메서드들
-  void updateStoreName(String value) =>
-      state = state.copyWith(storeName: value);
-  void updateCategory(String value) => state = state.copyWith(category: value);
-  void updateAddress(String value) => state = state.copyWith(address: value);
-  void updateAddressDetail(String value) =>
-      state = state.copyWith(addressDetail: value);
-  void updateHoliday(String value) => state = state.copyWith(holiday: value);
-  void updateOperatingHours(String value) =>
-      state = state.copyWith(operatingHours: value);
-  void updateParking(String value) => state = state.copyWith(parking: value);
-  void updateStoreNumber(String value) =>
-      state = state.copyWith(storeNumber: value);
-  void updateDescription(String value) =>
-      state = state.copyWith(description: value);
 }
