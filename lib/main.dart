@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tryvel/firebase_options.dart';
 import 'package:tryvel/ui/home/home_page.dart';
-import 'package:tryvel/core/constants/theme.dart'; // Theme import
+import 'package:tryvel/core/theme.dart'; // Theme import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

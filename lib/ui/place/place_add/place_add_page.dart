@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Riverpod 사용
-import 'package:tryvel/ui/place/place_add/placeAddViewModelProvider.dart';
+import 'package:tryvel/core/utils/validator_util.dart';
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
+import 'package:tryvel/ui/widgets/form_field/place/address_detail_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/image_uploader.dart';
@@ -11,13 +11,14 @@ import 'package:tryvel/ui/widgets/form_field/place/store_description_form_field.
 import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
+import 'place_add_view_model.dart';
 
-class PlaceAddPage extends ConsumerWidget {
+class PlaceAddPage extends StatelessWidget {
+  final viewModel = PlaceAddViewModel();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final viewModelManager = ref.watch(placeAddViewModelProvider.notifier);
-    final state = ref.watch(placeAddViewModelProvider);
-
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('플레이스 등록하기'),
@@ -26,116 +27,92 @@ class PlaceAddPage extends ConsumerWidget {
         children: [
           // 이미지 업로드 위젯
           ImageUploader(
-            imageUrl: state.imageUrl, // 업로드된 URL로 이미지 표시
+            imageUrl: viewModel.state.imageUrl,
             onImageSelected: () async {
-              await viewModelManager.pickImage(); // 이미지 선택 및 업로드 처리
+              await viewModel.pickImage();
             },
           ),
           const SizedBox(height: 20),
           Form(
+            key: formKey, // Form의 상태를 추적하기 위한 key 추가
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '상호명',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('상호명',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   StoreNameFormField(
-                    controller: TextEditingController(
-                      text: state.storeName,
-                    ),
-                    onChanged: viewModelManager.updateStoreName,
+                    controller: viewModel.storeNameController,
+                    onChanged: viewModel.updateStoreName,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '카테고리',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('카테고리',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   CategoryDropdownFormField(
-                    controller: TextEditingController(
-                      text: state.category,
-                    ),
-                    onChanged: viewModelManager.updateCategory,
+                    controller: viewModel.categoryController,
+                    onChanged: viewModel.updateCategory,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '주소',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('주소',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   AddressSearchFormField(
-                    addressController: TextEditingController(
-                      text: state.address,
-                    ),
+                    addressController: viewModel.addressController,
+                    coordinatesController: TextEditingController(),
                     onCoordinatesSaved: (latitude, longitude) {
-                      viewModelManager.updateAddress('$latitude, $longitude');
+                      viewModel.updateAddress('$latitude, $longitude');
                     },
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    '정기휴일',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  const SizedBox(height: 5),
+                  AddressDetailFormField(
+                    controller: viewModel.addressDetailController,
+                    onChanged: viewModel.updateAddressDetail,
                   ),
+                  const SizedBox(height: 20),
+                  const Text('정기휴일',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   HolidayFormField(
-                    controller: TextEditingController(
-                      text: state.holiday,
-                    ),
-                    onChanged: viewModelManager.updateHoliday,
+                    controller: viewModel.holidayController,
+                    onChanged: viewModel.updateHoliday,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '운영시간',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('운영시간',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   OperatingHoursFormField(
-                    controller: TextEditingController(
-                      text: state.operatingHours,
-                    ),
-                    onChanged: viewModelManager.updateOperatingHours,
+                    controller: viewModel.operatingHoursController,
+                    onChanged: viewModel.updateOperatingHours,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '주차가능여부',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('주차 가능 여부',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   ParkingFormField(
-                    controller: TextEditingController(
-                      text: state.parking,
-                    ),
-                    onChanged: viewModelManager.updateParking,
+                    controller: viewModel.parkingController,
+                    onChanged: viewModel.updateParking,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '매장 전화번호',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('매장 전화번호',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   StoreNumberFormField(
-                    controller: TextEditingController(
-                      text: state.storeNumber,
-                    ),
-                    onChanged: viewModelManager.updateStoreNumber,
+                    controller: viewModel.storeNumberController,
+                    onChanged: viewModel.updateStoreNumber,
+                    validator: ValidatorUtil.validatorstoreNumber,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '매장 소개',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
+                  const Text('매장 소개',
+                      style: TextStyle(fontSize: 14, color: Colors.grey)),
                   const SizedBox(height: 5),
                   StoreDescriptionFormField(
-                    controller: TextEditingController(
-                      text: state.description,
-                    ),
-                    onChanged: viewModelManager.updateDescription,
+                    controller: viewModel.storeDescriptionController,
+                    onChanged: viewModel.updateDescription,
                   ),
-                  const SizedBox(height: 200),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
@@ -144,15 +121,23 @@ class PlaceAddPage extends ConsumerWidget {
       ),
       bottomNavigationBar: Bottombutton(
         onPressed: () async {
-          final success = await viewModelManager.savePlace();
-          if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('등록되었습니다!')),
-            );
-            Navigator.pop(context);
+          if (formKey.currentState!.validate()) {
+            // 유효성 검사를 통과했을 때만 저장
+            final success = await viewModel.savePlace();
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('등록되었습니다!')),
+              );
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('등록에 실패했습니다. 다시 시도해주세요.')),
+              );
+            }
           } else {
+            // 유효성 검사가 실패했을 때
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('등록에 실패했습니다. 다시 시도해주세요.')),
+              const SnackBar(content: Text('등록승인을 위해 모든 정보가 필요합니다.')),
             );
           }
         },

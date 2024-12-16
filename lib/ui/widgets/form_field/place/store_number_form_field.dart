@@ -9,7 +9,8 @@ class StoreNumberFormField extends StatefulWidget {
   const StoreNumberFormField({
     Key? key,
     required this.controller,
-    this.onChanged, // onChanged 전달
+    this.onChanged,
+    required String? Function(String? value) validator, // onChanged 전달
   }) : super(key: key);
 
   @override

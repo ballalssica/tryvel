@@ -1,14 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-final placeUpdateViewModelProvider = StateNotifierProvider.family<
-    PlaceUpdateViewModel, PlaceUpdateState, String>(
-  (ref, placeId) => PlaceUpdateViewModel(placeId),
-);
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlaceUpdateState {
   final String? imageUrl;
@@ -24,12 +18,12 @@ class PlaceUpdateState {
   }
 }
 
-class PlaceUpdateViewModel extends StateNotifier<PlaceUpdateState> {
-  final String placeId;
+class PlaceUpdateViewModel {
+  PlaceUpdateState state = PlaceUpdateState();
 
   final storeNameController = TextEditingController();
   final categoryController = TextEditingController();
-  final addressSearchController = TextEditingController();
+  final addressController = TextEditingController();
   final holidayController = TextEditingController();
   final operatingHoursController = TextEditingController();
   final parkingController = TextEditingController();
@@ -40,11 +34,7 @@ class PlaceUpdateViewModel extends StateNotifier<PlaceUpdateState> {
   final _firestore = FirebaseFirestore.instance;
   final _picker = ImagePicker();
 
-  PlaceUpdateViewModel(this.placeId) : super(PlaceUpdateState()) {
-    _fetchPlaceData();
-  }
-
-  Future<void> _fetchPlaceData() async {
+  Future<void> fetchPlaceData(String placeId) async {
     try {
       final docSnapshot =
           await _firestore.collection('place').doc(placeId).get();
@@ -54,25 +44,21 @@ class PlaceUpdateViewModel extends StateNotifier<PlaceUpdateState> {
         if (data != null) {
           storeNameController.text = data['name'] ?? '';
           categoryController.text = data['category'] ?? '';
-          addressSearchController.text = data['address'] ?? '';
+          addressController.text = data['address'] ?? '';
           holidayController.text = data['holiday'] ?? '';
-          operatingHoursController.text =
-              '${data['open'] ?? ''} ~ ${data['close'] ?? ''}';
+          operatingHoursController.text = '${data['open']} ~ ${data['close']}';
           parkingController.text = data['parking'] ?? '';
           storeNumberController.text = data['tel'] ?? '';
           storeDescriptionController.text = data['description'] ?? '';
 
-          state = state.copyWith(
-            imageUrl: data['imageUrl'],
-            isLoading: false, // 데이터 로드 완료
-          );
+          state = state.copyWith(imageUrl: data['imageUrl'], isLoading: false);
         }
       } else {
-        state = state.copyWith(isLoading: false); // 문서가 없을 경우 로딩 해제
+        state = state.copyWith(isLoading: false);
       }
     } catch (e) {
       print('Error fetching place data: $e');
-      state = state.copyWith(isLoading: false); // 에러 발생 시 로딩 해제
+      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -99,13 +85,13 @@ class PlaceUpdateViewModel extends StateNotifier<PlaceUpdateState> {
     }
   }
 
-  Future<void> updatePlace() async {
+  Future<bool> updatePlace(String placeId) async {
     if (formKey.currentState!.validate()) {
       try {
         await _firestore.collection('place').doc(placeId).update({
           'name': storeNameController.text,
           'category': categoryController.text,
-          'address': addressSearchController.text,
+          'address': addressController.text,
           'holiday': holidayController.text,
           'open': operatingHoursController.text.split('~')[0].trim(),
           'close': operatingHoursController.text.split('~')[1].trim(),
@@ -114,9 +100,12 @@ class PlaceUpdateViewModel extends StateNotifier<PlaceUpdateState> {
           'description': storeDescriptionController.text,
           'imageUrl': state.imageUrl,
         });
+        return true;
       } catch (e) {
         print('Error updating place: $e');
+        return false;
       }
     }
+    return false;
   }
 }

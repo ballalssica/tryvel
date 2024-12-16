@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:remedi_kopo/remedi_kopo.dart';
+import 'package:tryvel/core/utils/validator_util.dart'; // ValidatorUtil 가져오기
 
 class AddressSearchFormField extends StatefulWidget {
   final TextEditingController addressController;
+  final TextEditingController coordinatesController; // 위도, 경도 표현용 컨트롤러 추가
+  final String? Function(String?)? validatorAddress; // 유효성 검사 함수
   final Function(String latitude, String longitude)? onCoordinatesSaved;
 
   const AddressSearchFormField({
     Key? key,
     required this.addressController,
+    required this.coordinatesController,
+    this.validatorAddress,
     this.onCoordinatesSaved,
   }) : super(key: key);
 
@@ -17,120 +22,65 @@ class AddressSearchFormField extends StatefulWidget {
 }
 
 class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
-  String? latitude;
-  String? longitude;
-
-  // Kakao API로 주소 검색
-  Future<void> openAddressSearch() async {
-    // 새 창에서 주소 검색 열기 (임시 예제)
-    final String? selectedAddress = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddressSearchPage(),
+  void _searchAddress(BuildContext context) async {
+    // 주소 검색 페이지 열기
+    KopoModel? model = await Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => RemediKopo(),
       ),
     );
 
-    if (selectedAddress != null) {
-      widget.addressController.text = selectedAddress;
-
-      // 주소를 위도와 경도로 변환
-      fetchCoordinates(selectedAddress);
-    }
-  }
-
-  // Kakao API로 위도와 경도 가져오기
-  Future<void> fetchCoordinates(String address) async {
-    const String apiKey = 'YOUR_KAKAO_API_KEY'; // Kakao REST API 키
-    final Uri url = Uri.parse(
-      'https://dapi.kakao.com/v2/local/search/address.json?query=$address',
-    );
-
-    try {
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'KakaoAK $apiKey'},
+    // 주소 검색 결과 처리
+    if (model != null) {
+      final address = model.address ?? '';
+      widget.addressController.value = TextEditingValue(
+        text: address,
       );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['documents'].isNotEmpty) {
-          final location = data['documents'][0];
-          setState(() {
-            latitude = location['y'];
-            longitude = location['x'];
-          });
+      // 예제 위도와 경도 (API 연동 시 실제 값으로 교체)
+      final latitude = "37.5665"; // 예시 위도
+      final longitude = "126.9780"; // 예시 경도
 
-          // 콜백을 통해 위도/경도 전달
-          if (widget.onCoordinatesSaved != null) {
-            widget.onCoordinatesSaved!(latitude!, longitude!);
-          }
+      // 위도와 경도를 coordinatesController에 추가
+      widget.coordinatesController.value = TextEditingValue(
+        text: "위도: $latitude, 경도: $longitude",
+      );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('위도: $latitude, 경도: $longitude')),
-          );
-        } else {
-          _showError('주소를 찾을 수 없습니다.');
-        }
-      } else {
-        _showError('요청 실패: ${response.statusCode}');
+      // 콜백 함수 호출
+      if (widget.onCoordinatesSaved != null) {
+        widget.onCoordinatesSaved!(latitude, longitude);
       }
-    } catch (e) {
-      _showError('에러 발생: $e');
     }
   }
 
-  // 에러 메시지 표시
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.addressController,
-      decoration: InputDecoration(
-        hintText: '주소를 검색해주세요.',
-        hintStyle: TextStyle(
-          fontSize: 15,
-          color: Colors.grey,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () => _searchAddress(context),
+          child: AbsorbPointer(
+            // TextField를 읽기 전용으로 만듦
+            child: TextFormField(
+              controller: widget.addressController,
+              decoration: InputDecoration(
+                hintText: '주소를 검색해주세요.',
+                border: const OutlineInputBorder(),
+                suffixIcon: widget.addressController.text.isEmpty
+                    ? const Icon(
+                        Icons.search,
+                        color: Colors.grey,
+                      )
+                    : null, // 주소가 비어있을 때만 돋보기 아이콘 표시
+              ),
+              validator:
+                  widget.validatorAddress ?? ValidatorUtil.validatoraddress,
+            ),
+          ),
         ),
-        border: const OutlineInputBorder(),
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.search),
-          color: Colors.grey,
-          onPressed: openAddressSearch,
-        ),
-      ),
-      readOnly: true, // 검색으로만 입력하도록 설정
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '주소를 검색해주세요.';
-        }
-        return null;
-      },
-    );
-  }
-}
-
-class AddressSearchPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // 주소 검색 API 연동 화면
-    // 여기서 Kakao API 검색 결과를 사용자에게 보여주고 주소를 선택하게 합니다.
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('주소 검색'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // 선택된 주소 예제 (실제 Kakao API 검색 결과 사용)
-            Navigator.of(context).pop('서울특별시 강남구 테헤란로');
-          },
-          child: const Text('다음우편번호 API 어렵다 ㅠㅠ'),
-        ),
-      ),
+      ],
     );
   }
 }

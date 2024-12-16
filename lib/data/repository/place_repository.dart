@@ -36,6 +36,7 @@ class PlaceRepository {
     required String name,
     required String category,
     required String address,
+    required String addressDetail,
     required String holiday,
     required String open, // 00:00 형식
     required String close, // 00:00 형식
@@ -53,6 +54,7 @@ class PlaceRepository {
         'name': name,
         'category': category,
         'address': address,
+        'addressDetail': addressDetail,
         'holiday': holiday,
         'open': open, // 문자열로 저장
         'close': close, // 문자열로 저장
@@ -95,6 +97,7 @@ Future<bool> update({
   required String name,
   required String category,
   required String address,
+  required String addressDetail,
   required String holiday,
   required String open,
   required String close,
@@ -114,6 +117,7 @@ Future<bool> update({
       'name': name,
       'category': category,
       'address': address,
+      'addressDetail': addressDetail,
       'holiday': holiday,
       'open': open,
       'close': close,

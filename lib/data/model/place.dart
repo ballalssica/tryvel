@@ -32,7 +32,7 @@ class Place {
             open: map['open'],
             close: map['close'],
             tel: map['tel'],
-            description: map['desciption']);
+            description: map['description']);
 
   // 2. toJson 메서드 만들기
   Map<String, dynamic> toJson() {

@@ -13,6 +13,13 @@ class ValidatorUtil {
     return null;
   }
 
+  static String? validatoraddress(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '주소를 알려주세요';
+    }
+    return null;
+  }
+
   static String? validatorHoliday(String? value) {
     if (value == null || value.trim().isEmpty) {
       return '휴일유무를 알려주세요.';
