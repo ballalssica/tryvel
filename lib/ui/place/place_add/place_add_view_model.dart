@@ -16,6 +16,8 @@ class PlaceAddState {
   final String storeNumber;
   final String description;
   final String? imageUrl;
+  final double latitude; // 위도 추가
+  final double longitude; // 경도 추가
 
   PlaceAddState({
     this.storeName = '',
@@ -28,6 +30,8 @@ class PlaceAddState {
     this.storeNumber = '',
     this.description = '',
     this.imageUrl,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
   });
 
   /// 상태를 업데이트하는 copyWith 메서드
@@ -42,6 +46,8 @@ class PlaceAddState {
     String? storeNumber,
     String? description,
     String? imageUrl,
+    double? latitude,
+    double? longitude,
   }) {
     return PlaceAddState(
       storeName: storeName ?? this.storeName,
@@ -54,6 +60,8 @@ class PlaceAddState {
       storeNumber: storeNumber ?? this.storeNumber,
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }
@@ -76,9 +84,6 @@ class PlaceAddViewModel extends ChangeNotifier {
   final parkingController = TextEditingController();
   final storeNumberController = TextEditingController();
   final storeDescriptionController = TextEditingController();
-
-  double latitude = 0.0; // 위도 저장
-  double longitude = 0.0; // 경도 저장
 
   /// 상태 업데이트 메서드들
   void updateStoreName(String value) {
@@ -126,10 +131,8 @@ class PlaceAddViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 위도와 경도를 업데이트
-  void updateCoordinates(double lat, double lng) {
-    latitude = lat;
-    longitude = lng;
+  void updateCoordinates(double latitude, double longitude) {
+    _state = _state.copyWith(latitude: latitude, longitude: longitude);
     notifyListeners();
   }
 
@@ -180,9 +183,9 @@ class PlaceAddViewModel extends ChangeNotifier {
       tel: _state.storeNumber,
       description: _state.description,
       imageUrl: _state.imageUrl,
-      latitude: latitude,
-      longitude: longitude,
-      parking: _state.parking,
+      latitude: _state.latitude, // 위도 추가
+      longitude: _state.longitude, // 경도 추가
+      parking: _state.parking, // 주차 가능 여부 추가
     );
   }
 }

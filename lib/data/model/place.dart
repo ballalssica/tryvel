@@ -5,16 +5,16 @@ class Place {
   String name;
   String category;
   String address;
-  String? addressDetail;
+  String? addressDetail; // nullable
   String holiday;
   String open;
   String close;
   String tel;
   String description;
-  String? imageUrl;
+  String? imageUrl; // nullable
   double latitude;
   double longitude;
-  Timestamp timestamp;
+  Timestamp? timestamp;
   String parking;
 
   Place({
@@ -22,16 +22,16 @@ class Place {
     required this.name,
     required this.category,
     required this.address,
-    required this.addressDetail,
+    this.addressDetail, // nullable
     required this.holiday,
     required this.open,
     required this.close,
     required this.tel,
     required this.description,
-    this.imageUrl,
+    this.imageUrl, // nullable
     required this.latitude,
     required this.longitude,
-    required this.timestamp,
+    this.timestamp,
     required this.parking,
   });
 
@@ -42,13 +42,13 @@ class Place {
       'name': name,
       'category': category,
       'address': address,
-      'addressDetail': addressDetail,
+      'addressDetail': addressDetail, // nullable 그대로 반영
       'holiday': holiday,
       'open': open,
       'close': close,
       'tel': tel,
       'description': description,
-      'imageUrl': imageUrl,
+      'imageUrl': imageUrl, // nullable 그대로 반영
       'latitude': latitude,
       'longitude': longitude,
       'timestamp': timestamp,
@@ -62,13 +62,13 @@ class Place {
         name = map['name'] ?? '',
         category = map['category'] ?? '',
         address = map['address'] ?? '',
-        addressDetail = map['addressDetail'] ?? '',
+        addressDetail = map['addressDetail'], // null 처리 유지
         holiday = map['holiday'] ?? '',
         open = map['open'] ?? '',
         close = map['close'] ?? '',
         tel = map['tel'] ?? '',
         description = map['description'] ?? '',
-        imageUrl = map['imageUrl'],
+        imageUrl = map['imageUrl'], // null 처리 유지
         latitude = _toDouble(map['latitude']),
         longitude = _toDouble(map['longitude']),
         timestamp = map['timestamp'] ?? Timestamp.now(),

@@ -8,7 +8,8 @@ class AddressSearchFormField extends StatefulWidget {
   final TextEditingController addressController;
   final TextEditingController coordinatesController; // 위도, 경도 표현용 컨트롤러 추가
   final String? Function(String?)? validatorAddress; // 유효성 검사 함수
-  final Function(String latitude, String longitude)? onCoordinatesSaved;
+  final Function(String address, String latitude, String longitude)?
+      onCoordinatesSaved; // address 추가
 
   const AddressSearchFormField({
     Key? key,
@@ -51,14 +52,19 @@ class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
     final String url =
         'https://dapi.kakao.com/v2/local/search/address.json?query=${Uri.encodeComponent(address)}';
 
+    // 헤더 구성
+    final headers = {'Authorization': 'KakaoAK $kakaoApiKey'};
+    print('Request Headers: $headers'); // 헤더 확인용 출력
+
     try {
       // dio 패키지를 사용하여 HTTP GET 요청
       final response = await Dio().get(
         url,
-        options: Options(
-          headers: {'Authorization': 'KakaoAK $kakaoApiKey'},
-        ),
+        options: Options(headers: headers),
       );
+
+      print('Response Status Code: ${response.statusCode}'); // 응답 상태 코드 출력
+      print('Response Data: ${response.data}'); // 응답 데이터 출력
 
       // Response에서 위도(latitude)와 경도(longitude) 추출
       if (response.data['documents'] != null &&
@@ -72,24 +78,23 @@ class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
         );
 
         // 위/경도 확인인
-        print('"위도: $latitude, 경도: $longitude"');
+        print('Address: $address, 위도: $latitude, 경도: $longitude');
 
         // 부모 위젯에 콜백 호출
         if (widget.onCoordinatesSaved != null) {
-          widget.onCoordinatesSaved!(latitude, longitude);
+          print(
+              'AddressSearchFormField에서 보낸 데이터: Address: $address, Latitude: $latitude, Longitude: $longitude');
+          widget.onCoordinatesSaved!(address, latitude, longitude);
         }
       } else {
         // 위도와 경도를 찾을 수 없는 경우
         widget.coordinatesController.value = TextEditingValue(
           text: "위도와 경도를 찾을 수 없습니다.",
         );
+        print('No documents found in the response.'); // 응답에 문서 없음 로그
       }
     } catch (e) {
-      // 에러 처리
-      widget.coordinatesController.value = TextEditingValue(
-        text: "위치 정보를 가져오는 데 실패했습니다.",
-      );
-      debugPrint('Error fetching coordinates: $e');
+      print('Error fetching coordinates: $e'); // 에러 로그 출력
     }
   }
 

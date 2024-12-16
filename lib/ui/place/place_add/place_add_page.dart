@@ -66,13 +66,15 @@ class PlaceAddPage extends StatelessWidget {
                         AddressSearchFormField(
                           addressController: viewModel.addressController,
                           coordinatesController: TextEditingController(),
-                          onCoordinatesSaved: (latitude, longitude) {
+                          onCoordinatesSaved: (address, latitude, longitude) {
+                            print(
+                                'PlaceAddPage에서 받은 콜백 데이터: Address: $address, Latitude: $latitude, Longitude: $longitude');
                             viewModel.updateCoordinates(
                               double.parse(latitude),
                               double.parse(longitude),
                             );
                             viewModel.updateAddress(
-                                viewModel.addressController.text);
+                                address); // Address를 ViewModel에 업데이트
                           },
                         ),
                         const SizedBox(height: 5),
@@ -121,7 +123,7 @@ class PlaceAddPage extends StatelessWidget {
                           controller: viewModel.storeDescriptionController,
                           onChanged: viewModel.updateDescription,
                         ),
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 200),
                       ],
                     ),
                   ),

@@ -93,7 +93,7 @@ class PlaceUpdatePage extends StatelessWidget {
                       TextFormField(
                         controller: viewModel.storeDescriptionController,
                       ),
-                      const SizedBox(height: 100),
+                      const SizedBox(height: 200),
                     ],
                   ),
                 ),

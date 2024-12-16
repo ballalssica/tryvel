@@ -14,6 +14,7 @@ class PlaceRepository {
       // 값 불러오기
       final result = await collectionRef.get();
       final docs = result.docs;
+
       return docs.map(
         (doc) {
           final map = doc.data();
@@ -24,8 +25,9 @@ class PlaceRepository {
           return Place.fromJson(newMap);
         },
       ).toList();
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      print('Error in getAll: $e');
+      print(stacktrace);
       return null;
     }
   }
@@ -57,7 +59,7 @@ class PlaceRepository {
         'name': name,
         'category': category,
         'address': address,
-        'addressDetail': addressDetail,
+        'addressDetail': addressDetail ?? '',
         'holiday': holiday,
         'open': open,
         'close': close,
@@ -66,12 +68,13 @@ class PlaceRepository {
         'latitude': latitude,
         'longitude': longitude,
         'timestamp': timestamp ?? Timestamp.now(),
-        'imageUrl': imageUrl,
+        'imageUrl': imageUrl ?? '',
         'parking': parking,
       });
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      print('Error in insert: $e');
+      print(stacktrace);
       return false;
     }
   }
@@ -91,10 +94,12 @@ class PlaceRepository {
           ...doc.data()!,
         });
       } else {
+        print('Document with ID $id does not exist.');
         return null;
       }
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      print('Error in getOne: $e');
+      print(stacktrace);
       return null;
     }
   }
@@ -128,7 +133,7 @@ class PlaceRepository {
         'name': name,
         'category': category,
         'address': address,
-        'addressDetail': addressDetail,
+        'addressDetail': addressDetail ?? '',
         'holiday': holiday,
         'open': open,
         'close': close,
@@ -137,12 +142,13 @@ class PlaceRepository {
         'latitude': latitude,
         'longitude': longitude,
         'timestamp': timestamp ?? Timestamp.now(),
-        'imageUrl': imageUrl,
+        'imageUrl': imageUrl ?? '',
         'parking': parking,
       });
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      print('Error in update: $e');
+      print(stacktrace);
       return false;
     }
   }
@@ -158,8 +164,9 @@ class PlaceRepository {
       // 삭제
       await docRef.delete();
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      print('Error in delete: $e');
+      print(stacktrace);
       return false;
     }
   }
