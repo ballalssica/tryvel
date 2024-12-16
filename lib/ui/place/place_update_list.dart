@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/data/model/place.dart';
-import 'package:tryvel/ui/place/place_update/place_update_page.dart';
+import 'package:tryvel/ui/place/place_update_page.dart';
 
 class PlaceUpdateList extends StatelessWidget {
   final PlaceRepository repository = PlaceRepository(); // 레포지토리 인스턴스 생성

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/ui/place/place_add/place_add_page.dart';
-import 'package:tryvel/ui/place/place_update/place_update_list.dart';
+import 'package:tryvel/ui/place/place_add_page.dart';
+import 'package:tryvel/ui/place/place_update_list.dart';
 
 class HomePage extends StatelessWidget {
   @override
