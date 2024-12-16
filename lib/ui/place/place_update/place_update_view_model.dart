@@ -24,16 +24,21 @@ class PlaceUpdateViewModel {
   final storeNameController = TextEditingController();
   final categoryController = TextEditingController();
   final addressController = TextEditingController();
+  final addressDetailController = TextEditingController();
   final holidayController = TextEditingController();
   final operatingHoursController = TextEditingController();
   final parkingController = TextEditingController();
   final storeNumberController = TextEditingController();
   final storeDescriptionController = TextEditingController();
+  final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
 
   final _firestore = FirebaseFirestore.instance;
   final _picker = ImagePicker();
 
+  /// Fetch place data from Firestore
   Future<void> fetchPlaceData(String placeId) async {
     try {
       final docSnapshot =
@@ -45,11 +50,14 @@ class PlaceUpdateViewModel {
           storeNameController.text = data['name'] ?? '';
           categoryController.text = data['category'] ?? '';
           addressController.text = data['address'] ?? '';
+          addressDetailController.text = data['addressDetail'] ?? '';
           holidayController.text = data['holiday'] ?? '';
           operatingHoursController.text = '${data['open']} ~ ${data['close']}';
           parkingController.text = data['parking'] ?? '';
           storeNumberController.text = data['tel'] ?? '';
           storeDescriptionController.text = data['description'] ?? '';
+          latitudeController.text = (data['latitude'] ?? 0.0).toString();
+          longitudeController.text = (data['longitude'] ?? 0.0).toString();
 
           state = state.copyWith(imageUrl: data['imageUrl'], isLoading: false);
         }
@@ -62,6 +70,7 @@ class PlaceUpdateViewModel {
     }
   }
 
+  /// Pick and upload an image to Firebase Storage
   Future<void> pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -72,6 +81,7 @@ class PlaceUpdateViewModel {
     }
   }
 
+  /// Upload the selected image to Firebase Storage
   Future<String?> _uploadImageToStorage(XFile image) async {
     try {
       final storageRef = FirebaseStorage.instance.ref().child(
@@ -80,11 +90,12 @@ class PlaceUpdateViewModel {
       final snapshot = await uploadTask;
       return await snapshot.ref.getDownloadURL();
     } catch (e) {
-      print('이미지 업로드 실패: $e');
+      print('Image upload failed: $e');
       return null;
     }
   }
 
+  /// Update the place data in Firestore
   Future<bool> updatePlace(String placeId) async {
     if (formKey.currentState!.validate()) {
       try {
@@ -92,12 +103,15 @@ class PlaceUpdateViewModel {
           'name': storeNameController.text,
           'category': categoryController.text,
           'address': addressController.text,
+          'addressDetail': addressDetailController.text,
           'holiday': holidayController.text,
           'open': operatingHoursController.text.split('~')[0].trim(),
           'close': operatingHoursController.text.split('~')[1].trim(),
           'parking': parkingController.text,
           'tel': storeNumberController.text,
           'description': storeDescriptionController.text,
+          'latitude': double.tryParse(latitudeController.text) ?? 0.0,
+          'longitude': double.tryParse(longitudeController.text) ?? 0.0,
           'imageUrl': state.imageUrl,
         });
         return true;

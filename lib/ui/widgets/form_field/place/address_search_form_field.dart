@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
-import 'package:tryvel/core/utils/validator_util.dart'; // ValidatorUtil 가져오기
+import 'package:dio/dio.dart'; // axios 대신 Flutter에서 HTTP 요청을 위해 dio 패키지 사용
+import 'package:tryvel/core/utils/validator_util.dart';
 
 class AddressSearchFormField extends StatefulWidget {
   final TextEditingController addressController;
@@ -22,7 +23,10 @@ class AddressSearchFormField extends StatefulWidget {
 }
 
 class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
-  void _searchAddress(BuildContext context) async {
+  final String kakaoApiKey =
+      "54e58cf81fee729b896e5b2a4d9ae211"; // 카카오 REST API 키
+
+  Future<void> _searchAddress(BuildContext context) async {
     // 주소 검색 페이지 열기
     KopoModel? model = await Navigator.push(
       context,
@@ -38,19 +42,54 @@ class _AddressSearchFormFieldState extends State<AddressSearchFormField> {
         text: address,
       );
 
-      // 예제 위도와 경도 (API 연동 시 실제 값으로 교체)
-      final latitude = "37.5665"; // 예시 위도
-      final longitude = "126.9780"; // 예시 경도
+      // 위도와 경도를 가져오는 함수 호출
+      await _getCoordinates(address);
+    }
+  }
 
-      // 위도와 경도를 coordinatesController에 추가
-      widget.coordinatesController.value = TextEditingValue(
-        text: "위도: $latitude, 경도: $longitude",
+  Future<void> _getCoordinates(String address) async {
+    final String url =
+        'https://dapi.kakao.com/v2/local/search/address.json?query=${Uri.encodeComponent(address)}';
+
+    try {
+      // dio 패키지를 사용하여 HTTP GET 요청
+      final response = await Dio().get(
+        url,
+        options: Options(
+          headers: {'Authorization': 'KakaoAK $kakaoApiKey'},
+        ),
       );
 
-      // 콜백 함수 호출
-      if (widget.onCoordinatesSaved != null) {
-        widget.onCoordinatesSaved!(latitude, longitude);
+      // Response에서 위도(latitude)와 경도(longitude) 추출
+      if (response.data['documents'] != null &&
+          response.data['documents'].isNotEmpty) {
+        final latitude = response.data['documents'][0]['y'];
+        final longitude = response.data['documents'][0]['x'];
+
+        // coordinatesController에 위도와 경도를 저장
+        widget.coordinatesController.value = TextEditingValue(
+          text: "위도: $latitude, 경도: $longitude",
+        );
+
+        // 위/경도 확인인
+        print('"위도: $latitude, 경도: $longitude"');
+
+        // 부모 위젯에 콜백 호출
+        if (widget.onCoordinatesSaved != null) {
+          widget.onCoordinatesSaved!(latitude, longitude);
+        }
+      } else {
+        // 위도와 경도를 찾을 수 없는 경우
+        widget.coordinatesController.value = TextEditingValue(
+          text: "위도와 경도를 찾을 수 없습니다.",
+        );
       }
+    } catch (e) {
+      // 에러 처리
+      widget.coordinatesController.value = TextEditingValue(
+        text: "위치 정보를 가져오는 데 실패했습니다.",
+      );
+      debugPrint('Error fetching coordinates: $e');
     }
   }
 

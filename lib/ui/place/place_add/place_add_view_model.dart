@@ -77,6 +77,9 @@ class PlaceAddViewModel extends ChangeNotifier {
   final storeNumberController = TextEditingController();
   final storeDescriptionController = TextEditingController();
 
+  double latitude = 0.0; // 위도 저장
+  double longitude = 0.0; // 경도 저장
+
   /// 상태 업데이트 메서드들
   void updateStoreName(String value) {
     _state = _state.copyWith(storeName: value);
@@ -120,6 +123,13 @@ class PlaceAddViewModel extends ChangeNotifier {
 
   void updateDescription(String value) {
     _state = _state.copyWith(description: value);
+    notifyListeners();
+  }
+
+  /// 위도와 경도를 업데이트
+  void updateCoordinates(double lat, double lng) {
+    latitude = lat;
+    longitude = lng;
     notifyListeners();
   }
 
@@ -170,6 +180,9 @@ class PlaceAddViewModel extends ChangeNotifier {
       tel: _state.storeNumber,
       description: _state.description,
       imageUrl: _state.imageUrl,
+      latitude: latitude,
+      longitude: longitude,
+      parking: _state.parking,
     );
   }
 }

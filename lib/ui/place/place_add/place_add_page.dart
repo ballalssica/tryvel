@@ -67,7 +67,12 @@ class PlaceAddPage extends StatelessWidget {
                           addressController: viewModel.addressController,
                           coordinatesController: TextEditingController(),
                           onCoordinatesSaved: (latitude, longitude) {
-                            viewModel.updateAddress('$latitude, $longitude');
+                            viewModel.updateCoordinates(
+                              double.parse(latitude),
+                              double.parse(longitude),
+                            );
+                            viewModel.updateAddress(
+                                viewModel.addressController.text);
                           },
                         ),
                         const SizedBox(height: 5),
@@ -143,7 +148,7 @@ class PlaceAddPage extends StatelessWidget {
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('등록승인을 위해 모든 정보가 필요합니다.')),
+                    const SnackBar(content: Text('등록 승인을 위해 모든 정보가 필요합니다.')),
                   );
                 }
               },
