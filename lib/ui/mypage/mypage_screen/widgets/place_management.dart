@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/data/model/place.dart';
 import 'package:tryvel/ui/place/place_update/place_update_page.dart';
+import 'package:tryvel/ui/widgets/popup/two_button_popup.dart';
 
 class PlaceManagement extends StatefulWidget {
   const PlaceManagement({Key? key}) : super(key: key);
@@ -30,12 +31,14 @@ class _PlaceManagementState extends State<PlaceManagement> {
     }
   }
 
-  void _deletePlace(String id) async {
+  // 삭제 함수: 삭제 성공 여부를 반환
+  Future<bool> _deletePlace(String id) async {
     final repository = PlaceRepository();
     final success = await repository.delete(id);
     if (success) {
-      _fetchPlaces(); // 삭제 후 리스트 갱신
+      await _fetchPlaces(); // 삭제 후 리스트 갱신
     }
+    return success;
   }
 
   @override
@@ -147,7 +150,33 @@ class _PlaceManagementState extends State<PlaceManagement> {
                         // 삭제 버튼
                         TextButton(
                           onPressed: () {
-                            _deletePlace(place.id);
+                            // 팝업 호출
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return TwoButtonPopup(
+                                  content: Text(
+                                    '${place.name}을 삭제하시겠습니까?',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 18.0),
+                                  ),
+                                  onCancel: () {
+                                    Navigator.of(context).pop(); // 팝업 닫기
+                                  },
+                                  onConfirm: () async {
+                                    final success =
+                                        await _deletePlace(place.id);
+                                    if (success) {
+                                      Navigator.of(context)
+                                          .pop(); // 삭제 성공 시 팝업 닫기
+                                    } else {
+                                      // 실패 처리 (로그 출력 또는 알림)
+                                      print('삭제 실패');
+                                    }
+                                  },
+                                );
+                              },
+                            );
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -177,8 +206,8 @@ class _PlaceManagementState extends State<PlaceManagement> {
                   if (index != _places.length - 1)
                     const Divider(
                       color: Colors.white,
-                      thickness: 1.0, // 라인의 두께
-                      height: 0.0, // 위아래 간격 최소화
+                      thickness: 1.0,
+                      height: 0.0,
                     ),
                 ],
               );

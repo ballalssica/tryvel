@@ -11,6 +11,7 @@ class PlaceAddPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => PlaceViewModel(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(title: const Text('플레이스 등록하기')),
         body: Consumer<PlaceViewModel>(
           builder: (context, viewModel, _) {

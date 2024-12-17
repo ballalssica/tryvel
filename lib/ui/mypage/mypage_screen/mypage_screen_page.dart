@@ -5,7 +5,7 @@ import 'package:tryvel/ui/mypage/mypage_screen/widgets/place_management.dart';
 class MypageScreenPage extends StatelessWidget {
   final String imageUrl = 'https://picsum.photos/200'; // 동그란 사진 URL (더미 이미지)
   final String name = '김민지'; // 이름
-  final String introduction = '소개글입니다.'; // 소개글
+  final String introduction = '네이버여행인플루언서.'; // 소개글
 
   const MypageScreenPage({Key? key}) : super(key: key);
 

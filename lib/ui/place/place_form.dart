@@ -29,6 +29,7 @@ class PlaceForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           // 이미지 업로드 위젯
@@ -122,7 +123,7 @@ class PlaceForm extends StatelessWidget {
                     controller: viewModel.storeDescriptionController,
                     onChanged: viewModel.updateDescription,
                   ),
-                  const SizedBox(height: 200),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),

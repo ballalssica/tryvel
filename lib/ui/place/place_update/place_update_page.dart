@@ -26,6 +26,7 @@ class _PlaceUpdatePageState extends State<PlaceUpdatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('플레이스 수정하기')),
       body: PlaceForm(
         viewModel: viewModel,
