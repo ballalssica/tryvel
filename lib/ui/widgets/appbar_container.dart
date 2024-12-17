@@ -7,7 +7,7 @@ class AppbarContainer extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white, // AppBar 배경색
+      color: Colors.transparent, // AppBar 배경색
       child: Row(
         children: [
           // 활동지역 텍스트
