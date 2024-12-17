@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
-import 'package:tryvel/ui/place/PlaceAddState.dart';
+import 'package:tryvel/ui/place/place_add_state.dart';
 
 class PlaceViewModel extends ChangeNotifier {
   final PlaceRepository _placeRepository = PlaceRepository();

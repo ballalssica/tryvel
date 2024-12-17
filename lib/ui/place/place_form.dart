@@ -9,7 +9,7 @@ import 'package:tryvel/ui/widgets/form_field/place/parking_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_description_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
 import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
-import 'package:tryvel/ui/place/PlaceViewModel.dart';
+import 'package:tryvel/ui/place/place_view_model.dart';
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 
 class PlaceForm extends StatelessWidget {

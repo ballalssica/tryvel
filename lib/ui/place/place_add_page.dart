@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tryvel/ui/place/PlaceForm.dart';
-import 'package:tryvel/ui/place/PlaceViewModel.dart';
+import 'package:tryvel/ui/place/place_form.dart';
+import 'package:tryvel/ui/place/place_view_model.dart';
 
 class PlaceAddPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
