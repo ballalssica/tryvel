@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:tryvel/data/model/place.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/ui/place/place_add/place_add_state.dart';
 
@@ -13,6 +14,7 @@ class PlaceViewModel extends ChangeNotifier {
   PlaceAddState get state => _state;
   bool get isLoading => _isLoading;
 
+  // 텍스트 컨트롤러들
   final storeNameController = TextEditingController();
   final categoryController = TextEditingController();
   final addressController = TextEditingController();
@@ -23,6 +25,7 @@ class PlaceViewModel extends ChangeNotifier {
   final storeNumberController = TextEditingController();
   final storeDescriptionController = TextEditingController();
 
+  // 필드 업데이트 함수들
   void updateStoreName(String value) {
     _state = _state.copyWith(storeName: value);
     notifyListeners();
@@ -73,6 +76,7 @@ class PlaceViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 이미지 선택 및 업로드
   Future<void> pickImage() async {
     final picker = ImagePicker();
     final XFile? pickedImage =
@@ -99,6 +103,7 @@ class PlaceViewModel extends ChangeNotifier {
     }
   }
 
+  // 새로운 Place 저장
   Future<bool> savePlace() async {
     try {
       _isLoading = true;
@@ -130,6 +135,7 @@ class PlaceViewModel extends ChangeNotifier {
     }
   }
 
+  // 기존 Place 업데이트
   Future<bool> updatePlace(String placeId) async {
     try {
       _isLoading = true;
@@ -162,42 +168,34 @@ class PlaceViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchPlaceData(String placeId) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-      final place = await _placeRepository.getOne(placeId);
-      if (place != null) {
-        _state = PlaceAddState(
-          storeName: place.name,
-          category: place.category,
-          address: place.address,
-          addressDetail: place.addressDetail ?? '',
-          holiday: place.holiday,
-          operatingHours: '${place.open} ~ ${place.close}',
-          parking: place.parking,
-          storeNumber: place.tel,
-          description: place.description,
-          imageUrl: place.imageUrl,
-          latitude: place.latitude,
-          longitude: place.longitude,
-        );
-        storeNameController.text = _state.storeName;
-        categoryController.text = _state.category;
-        addressController.text = _state.address;
-        addressDetailController.text = _state.addressDetail;
-        holidayController.text = _state.holiday;
-        operatingHoursController.text = _state.operatingHours;
-        parkingController.text = _state.parking;
-        storeNumberController.text = _state.storeNumber;
-        storeDescriptionController.text = _state.description;
-      }
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      print('Error fetching place data: $e');
-      _isLoading = false;
-      notifyListeners();
-    }
+  // 기존 데이터를 초기화하는 메서드
+  void setPlaceData(Place place) {
+    _state = PlaceAddState(
+      storeName: place.name,
+      category: place.category,
+      address: place.address,
+      addressDetail: place.addressDetail ?? '',
+      holiday: place.holiday,
+      operatingHours: '${place.open} ~ ${place.close}',
+      parking: place.parking,
+      storeNumber: place.tel,
+      description: place.description,
+      imageUrl: place.imageUrl,
+      latitude: place.latitude,
+      longitude: place.longitude,
+    );
+
+    // 컨트롤러 초기화
+    storeNameController.text = _state.storeName;
+    categoryController.text = _state.category;
+    addressController.text = _state.address;
+    addressDetailController.text = _state.addressDetail;
+    holidayController.text = _state.holiday;
+    operatingHoursController.text = _state.operatingHours;
+    parkingController.text = _state.parking;
+    storeNumberController.text = _state.storeNumber;
+    storeDescriptionController.text = _state.description;
+
+    notifyListeners();
   }
 }

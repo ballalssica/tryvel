@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/data/model/place.dart';
-import 'package:tryvel/ui/place/place_add/place_add_page.dart';
+import 'package:tryvel/ui/place/place_update/place_update_page.dart';
 
 class PlaceManagement extends StatefulWidget {
   const PlaceManagement({Key? key}) : super(key: key);
@@ -128,7 +128,7 @@ class _PlaceManagementState extends State<PlaceManagement> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                PlaceAddPage(place: place), // Place 객체 넘겨주기
+                                PlaceUpdatePage(place: place), // Place 객체 넘겨주기
                           ),
                         );
                       },

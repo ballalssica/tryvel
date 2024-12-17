@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/ui/place/place_add/place_add_page.dart';
-import 'package:tryvel/ui/place/place_update/place_update_list.dart';
 
 class MypageScreenPage extends StatelessWidget {
   @override
@@ -27,7 +26,7 @@ class MypageScreenPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PlaceUpdateList()),
+                    MaterialPageRoute(builder: (context) => PlaceAddPage()),
                   );
                 },
                 child: const Text('플레이스 수정하기'),
