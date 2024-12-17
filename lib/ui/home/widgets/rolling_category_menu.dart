@@ -45,8 +45,13 @@ class RollingCategoryMenu extends StatelessWidget {
       color: Colors.white,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: categories.length + 1, // 마지막 여백을 위한 아이템 추가
         itemBuilder: (context, index) {
+          if (index == categories.length) {
+            // 마지막 아이템: SizedBox 추가
+            return const SizedBox(width: 16);
+          }
+
           final category = categories[index];
           final icon = category['icon'] ?? Icons.category;
           final name = category['name'] ?? '이름 없음';

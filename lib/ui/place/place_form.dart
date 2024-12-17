@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/ui/widgets/form_field/place/address_detail_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/address_search_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/category_dropdown_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/holiday_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/image_uploader.dart';
-import 'package:tryvel/ui/widgets/form_field/place/operating_hours_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/parking_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/store_description_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/store_name_form_field.dart';
-import 'package:tryvel/ui/widgets/form_field/place/store_number_form_field.dart';
 import 'package:tryvel/ui/place/place_view_model.dart';
+import 'package:tryvel/ui/place/widgets/address_detail_form_field.dart';
+import 'package:tryvel/ui/place/widgets/address_search_form_field.dart';
+import 'package:tryvel/ui/place/widgets/category_dropdown_form_field.dart';
+import 'package:tryvel/ui/place/widgets/holiday_form_field.dart';
+import 'package:tryvel/ui/place/widgets/image_uploader.dart';
+import 'package:tryvel/ui/place/widgets/operating_hours_form_field.dart';
+import 'package:tryvel/ui/place/widgets/parking_form_field.dart';
+import 'package:tryvel/ui/place/widgets/store_description_form_field.dart';
+import 'package:tryvel/ui/place/widgets/store_name_form_field.dart';
+import 'package:tryvel/ui/place/widgets/store_number_form_field.dart';
 import 'package:tryvel/ui/widgets/button/bottombutton.dart';
 
 class PlaceForm extends StatelessWidget {
