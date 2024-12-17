@@ -89,7 +89,7 @@ class _PlaceManagementState extends State<PlaceManagement> {
                   _isExpanded
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
-                  color: Colors.grey,
+                  color: Colors.amber,
                   size: 30,
                 ),
                 const SizedBox(width: 8),
@@ -114,7 +114,7 @@ class _PlaceManagementState extends State<PlaceManagement> {
                         Expanded(
                           child: Text(
                             place.name,
-                            style: const TextStyle(fontSize: 16.0),
+                            style: const TextStyle(fontSize: 14.0),
                           ),
                         ),
                         // 수정 버튼

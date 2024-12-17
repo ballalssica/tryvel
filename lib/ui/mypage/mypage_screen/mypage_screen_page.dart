@@ -12,7 +12,10 @@ class MypageScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(), // 빈 AppBar
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ), // 빈 AppBar
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0), // 좌우 패딩
         child: ListView(
@@ -102,7 +105,7 @@ class MypageScreenPage extends StatelessWidget {
                       // 왼쪽에 꼬리 없는 화살표 아이콘
                       const Icon(
                         Icons.keyboard_arrow_right, // 꼬리 없는 화살표 아이콘
-                        color: Colors.grey,
+                        color: Colors.amber,
                         size: 30,
                       ),
                       const SizedBox(width: 8), // 간격

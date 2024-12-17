@@ -42,7 +42,7 @@ class CampaignRegistration extends StatelessWidget {
                 ),
                 SizedBox(height: 4.0),
                 Text(
-                  '플레이스를 등록하고 정보를 수정할 수 있어요.',
+                  '캠페인 등록을 위해 플레이스를 먼저 등록해주세요.',
                   style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.grey,
@@ -55,7 +55,7 @@ class CampaignRegistration extends StatelessWidget {
             // 오른쪽에 꼬리 없는 화살표 아이콘
             const Icon(
               Icons.keyboard_arrow_right, // 꼬리 없는 화살표 아이콘
-              color: Colors.grey,
+              color: Colors.amber,
               size: 30,
             ),
             const SizedBox(width: 8), // 아이콘과 끝 사이의 간격
