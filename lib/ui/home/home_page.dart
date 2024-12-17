@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
       'title': '캠페인 2',
       'description': '친환경 캠페인에 동참하세요.',
       'imageUrl': 'https://picsum.photos/50/50?2',
-      'isReservationRequired': false,
+      'isReservationRequired': true,
       'isAvailableNow': true,
       'isFavorite': true,
     },

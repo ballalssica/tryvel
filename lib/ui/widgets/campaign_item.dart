@@ -63,9 +63,8 @@ class _CampaignItemState extends State<CampaignItem> {
                     alignment: Alignment.topRight, // 아이콘을 오른쪽 위로 정렬
                     child: Icon(
                       _isFavorite ? Icons.star : Icons.star_border,
-                      color: _isFavorite
-                          ? Colors.amber
-                          : Colors.amber, // 조건에 따라 색상 설정
+                      color:
+                          _isFavorite ? Colors.amber : Colors.amber, // 별 상태 색상
                       size: 20,
                     ),
                   ),
@@ -102,9 +101,9 @@ class _CampaignItemState extends State<CampaignItem> {
                 Row(
                   children: [
                     if (widget.isReservationRequired)
-                      _buildStatusContainer('예약 필수', Colors.grey),
+                      _buildStatusContainer('예약 필수', true),
                     if (widget.isAvailableNow)
-                      _buildStatusContainer('바로 이용 가능', Colors.amber),
+                      _buildStatusContainer('바로 이용 가능', false),
                   ],
                 ),
               ],
@@ -116,20 +115,26 @@ class _CampaignItemState extends State<CampaignItem> {
   }
 
   // 상태 표시용 텍스트 컨테이너 위젯
-  Widget _buildStatusContainer(String text, Color color) {
+  Widget _buildStatusContainer(String text, bool isReservation) {
     return Container(
       margin: const EdgeInsets.only(right: 8.0),
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color:
+            isReservation ? Colors.amber : Colors.transparent, // 예약 필수: 앰버 배경
         borderRadius: BorderRadius.circular(4.0),
+        border: isReservation
+            ? null
+            : Border.all(color: Colors.amber, width: 1.0), // 바로이용: 앰버 테두리
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: color,
+          color: isReservation
+              ? Colors.white
+              : Colors.amber, // 예약 필수: 화이트, 바로이용: 앰버
           fontSize: 10.0,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.normal, // 텍스트 스타일: 볼드 아님
         ),
       ),
     );
