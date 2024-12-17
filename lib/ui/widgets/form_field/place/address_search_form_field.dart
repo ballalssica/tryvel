@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
-import 'package:dio/dio.dart'; // axios 대신 Flutter에서 HTTP 요청을 위해 dio 패키지 사용
+import 'package:dio/dio.dart';
 import 'package:tryvel/core/utils/validator_util.dart';
 
 class AddressSearchFormField extends StatefulWidget {
