@@ -101,76 +101,88 @@ class _PlaceManagementState extends State<PlaceManagement> {
         // 리스트가 확장되면 플레이스 데이터 표시
         if (_isExpanded)
           Column(
-            children: _places.map((place) {
-              return Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Color(0xFFE0E0E0),
-                      width: 1.0,
+            children: List.generate(_places.length, (index) {
+              final place = _places[index];
+              return Column(
+                children: [
+                  Container(
+                    color: Colors.grey[100],
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        // 플레이스 이름
+                        Expanded(
+                          child: Text(
+                            place.name,
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                        // 수정 버튼
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PlaceUpdatePage(place: place),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.amber,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                          ),
+                          child: const Text(
+                            '수정',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // 삭제 버튼
+                        TextButton(
+                          onPressed: () {
+                            _deletePlace(place.id);
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                              color: Colors.amber,
+                              width: 1.0,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                          ),
+                          child: const Text(
+                            '삭제',
+                            style: TextStyle(
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    // 플레이스 이름
-                    Expanded(
-                      child: Text(
-                        place.name,
-                        style: const TextStyle(fontSize: 16.0),
-                      ),
+                  // Divider 추가 (마지막 요소는 제외)
+                  if (index != _places.length - 1)
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 1.0, // 라인의 두께
+                      height: 0.0, // 위아래 간격 최소화
                     ),
-                    // 수정 버튼
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PlaceUpdatePage(place: place), // Place 객체 넘겨주기
-                          ),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                      ),
-                      child: const Text(
-                        '수정',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    // 삭제 버튼
-                    TextButton(
-                      onPressed: () {
-                        _deletePlace(place.id); // 삭제 기능
-                      },
-                      style: TextButton.styleFrom(
-                        side: const BorderSide(
-                          color: Colors.amber,
-                          width: 1.0,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                      ),
-                      child: const Text(
-                        '삭제',
-                        style: TextStyle(
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               );
-            }).toList(),
+            }),
           ),
       ],
     );

@@ -111,6 +111,9 @@ class MypageScreenPage extends StatelessWidget {
                 ),
                 CampaignRegistration(),
                 PlaceManagement(),
+                SizedBox(
+                  height: 100,
+                )
               ],
             ),
           ],
