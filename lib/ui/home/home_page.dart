@@ -11,48 +11,48 @@ class HomePage extends StatelessWidget {
   // 더미 데이터: 캠페인 리스트
   final List<Map<String, dynamic>> dummyCampaigns = [
     {
-      'title': '캠페인 1',
-      'description': '이 캠페인은 지역 홍보를 위한 이벤트입니다.',
+      'title': '[인천] 아늑호텔 구월점점',
+      'description': '중식뷔페 2인제공공.',
       'imageUrl': 'https://picsum.photos/50/50?1',
       'isReservationRequired': true, // 예약 필수 여부
       'isAvailableNow': false, // 바로 이용 가능 여부
       'isFavorite': false, // 별 아이콘 상태
     },
     {
-      'title': '캠페인 2',
-      'description': '친환경 캠페인에 동참하세요.',
+      'title': '[삼성] 우도옥_점심심]',
+      'description': '점심 50,000원 이용권권',
       'imageUrl': 'https://picsum.photos/50/50?2',
       'isReservationRequired': true,
       'isAvailableNow': true,
       'isFavorite': true,
     },
     {
-      'title': '캠페인 3',
-      'description': '오늘부터 바로 이용 가능한 캠페인입니다.',
+      'title': '[강동] 아트앰유 미술학원',
+      'description': '성인미술 원데이클래스스',
       'imageUrl': 'https://picsum.photos/50/50?3',
       'isReservationRequired': false,
       'isAvailableNow': true,
       'isFavorite': false,
     },
     {
-      'title': '캠페인 4',
-      'description': '한정판 혜택이 제공되는 특별 캠페인입니다.',
+      'title': '[삼척] 이클리프풀빌라라',
+      'description': '월~목 숙박권',
       'imageUrl': 'https://picsum.photos/50/50?4',
       'isReservationRequired': true,
       'isAvailableNow': false,
       'isFavorite': true,
     },
     {
-      'title': '캠페인 5',
-      'description': '전국적으로 진행되는 대규모 이벤트.',
+      'title': '[수유] 도고집',
+      'description': '2인식사권',
       'imageUrl': 'https://picsum.photos/50/50?5',
       'isReservationRequired': false,
       'isAvailableNow': false,
       'isFavorite': false,
     },
     {
-      'title': '캠페인 6',
-      'description': '현장에서 바로 참여 가능한 캠페인.',
+      'title': '[파주] 퍼스트가든',
+      'description': '퍼스트가든 이용권권.',
       'imageUrl': 'https://picsum.photos/50/50?6',
       'isReservationRequired': false,
       'isAvailableNow': true,

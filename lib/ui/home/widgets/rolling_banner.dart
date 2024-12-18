@@ -65,11 +65,11 @@ class _RollingBannerState extends State<RollingBanner> {
   }
 
   Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url); // URL을 Uri로 변환
+    final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      throw 'Could not launch $url';
+      debugPrint('Could not launch $url');
     }
   }
 
