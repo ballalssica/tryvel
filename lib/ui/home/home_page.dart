@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/ui/home/widgets/campain_list.dart';
+import 'package:tryvel/ui/home/widgets/rolling_banner.dart';
 import 'package:tryvel/ui/home/widgets/rolling_category_menu.dart';
 import 'package:tryvel/ui/widgets/appbar_container.dart';
 import 'package:tryvel/ui/widgets/button/bottom_navigation.dart';
@@ -71,16 +72,8 @@ class HomePage extends StatelessWidget {
       body: ListView(
         children: [
           // 이미지 배너
-          Container(
-            height: 300,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage('https://picsum.photos/200/300'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+
+          RollingBanner(),
           const SizedBox(height: 10),
 
           Container(
