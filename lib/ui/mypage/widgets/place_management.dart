@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tryvel/data/repository/place_repository.dart';
 import 'package:tryvel/data/model/place.dart';
 import 'package:tryvel/ui/place/place_update/place_update_page.dart';
+import 'package:tryvel/ui/place/place_add/place_add_page.dart';
 import 'package:tryvel/ui/widgets/popup/two_button_popup.dart';
 
 class PlaceManagement extends StatefulWidget {
@@ -46,57 +47,56 @@ class _PlaceManagementState extends State<PlaceManagement> {
     return Column(
       children: [
         // 상단 타이틀 영역
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isExpanded = !_isExpanded; // 확장/축소 상태 변경
-            });
-          },
-          child: Container(
-            width: double.infinity,
-            height: 100,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Color(0xFFE0E0E0),
-                  width: 1.0,
+        Container(
+          color: Colors.white,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded; // 확장/축소 상태 변경
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              width: double.infinity,
+              height: 70,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFF5F5F5),
+                    width: 1.0, // 경계선 두께
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Text(
                       '플레이스 관리',
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      '플레이스를 등록하고 정보를 수정할 수 있어요.',
-                      style: TextStyle(
-                        fontSize: 14.0,
                         color: Colors.grey,
                       ),
                     ),
-                  ],
-                ),
-                const Spacer(),
-                Icon(
-                  _isExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: Colors.amber,
-                  size: 30,
-                ),
-                const SizedBox(width: 8),
-              ],
+                  ),
+                  const Spacer(),
+                  Icon(
+                    _isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
             ),
           ),
         ),
@@ -104,114 +104,164 @@ class _PlaceManagementState extends State<PlaceManagement> {
         // 리스트가 확장되면 플레이스 데이터 표시
         if (_isExpanded)
           Column(
-            children: List.generate(_places.length, (index) {
-              final place = _places[index];
-              return Column(
-                children: [
-                  Container(
-                    color: Colors.grey[100],
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        // 플레이스 이름
-                        Expanded(
-                          child: Text(
-                            place.name,
-                            style: const TextStyle(fontSize: 14.0),
+            children: [
+              ...List.generate(_places.length, (index) {
+                final place = _places[index];
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 8),
+                      child: Container(
+                        height: 70,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color(0xFFD6D6D6),
+                            width: 1.0,
                           ),
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                        // 수정 버튼
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    PlaceUpdatePage(place: place),
-                              ),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.amber,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 8,
+                              color: Colors.amber,
                             ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                          ),
-                          child: const Text(
-                            '수정',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        // 삭제 버튼
-                        TextButton(
-                          onPressed: () {
-                            // 팝업 호출
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return TwoButtonPopup(
-                                  content: Text(
-                                    '${place.name}을 삭제하시겠습니까?',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 18.0),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  place.name,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  onCancel: () {
-                                    Navigator.of(context).pop(); // 팝업 닫기
-                                  },
-                                  onConfirm: () async {
-                                    final success =
-                                        await _deletePlace(place.id);
-                                    if (success) {
-                                      Navigator.of(context)
-                                          .pop(); // 삭제 성공 시 팝업 닫기
-                                    } else {
-                                      // 실패 처리 (로그 출력 또는 알림)
-                                      print('삭제 실패');
-                                    }
-                                  },
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PlaceUpdatePage(place: place),
+                                  ),
                                 );
                               },
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: const BorderSide(
-                              color: Colors.amber,
-                              width: 1.0,
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xFF4A4A4A),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                              ),
+                              child: const Text(
+                                '수정',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                            const SizedBox(width: 8),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return TwoButtonPopup(
+                                        content: Text(
+                                          '${place.name}을 삭제하시겠습니까?',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 18.0),
+                                        ),
+                                        onCancel: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        onConfirm: () async {
+                                          final success =
+                                              await _deletePlace(place.id);
+                                          if (success) {
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            print('삭제 실패');
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(
+                                    color: Color(0xFF4A4A4A),
+                                    width: 1.0,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                ),
+                                child: const Text(
+                                  '삭제',
+                                  style: TextStyle(
+                                    color: Color(0xFF4A4A4A),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                          ),
-                          child: const Text(
-                            '삭제',
-                            style: TextStyle(
-                              color: Colors.amber,
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
+                  ],
+                );
+              }),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlaceAddPage(),
+                    ),
+                  ).then((added) {
+                    if (added == true) {
+                      _fetchPlaces(); // 데이터 새로고침
+                    }
+                  });
+                },
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.amber,
+                    shape: BoxShape.circle,
                   ),
-                  // Divider 추가 (마지막 요소는 제외)
-                  if (index != _places.length - 1)
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 1.0,
-                      height: 0.0,
-                    ),
-                ],
-              );
-            }),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
           ),
       ],
     );

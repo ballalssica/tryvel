@@ -23,7 +23,26 @@ class PlaceAddPage extends StatelessWidget {
                 if (formKey.currentState!.validate()) {
                   final success = await viewModel.savePlace();
                   if (success) {
-                    Navigator.pop(context);
+                    // 팝업 표시
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: const Text(
+                            '등록되었습니다.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        );
+                      },
+                    );
+
+                    // 1초 후 팝업 닫고 데이터 저장 상태 전달
+                    Future.delayed(const Duration(seconds: 1), () {
+                      Navigator.pop(context); // 팝업 닫기
+                      Navigator.pop(context, true); // 이전 페이지로 데이터 추가 성공 전달
+                    });
                   }
                 }
               },

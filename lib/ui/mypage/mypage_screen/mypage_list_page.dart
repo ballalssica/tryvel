@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tryvel/ui/mypage/mypage_screen/mypage_business.dart';
+import 'package:tryvel/ui/mypage/mypage_screen/mypage_influencer.dart';
 import 'package:tryvel/ui/mypage/mypage_screen/mypage_screen_page.dart';
 import 'package:tryvel/ui/widgets/button/amberbotton.dart';
 
@@ -39,7 +41,7 @@ class MypageListPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MypageScreenPage(),
+                    builder: (context) => MypageBusiness(),
                   ),
                 );
               },
@@ -54,7 +56,7 @@ class MypageListPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MypageScreenPage(),
+                    builder: (context) => MypageInfluencer(),
                   ),
                 );
               },

@@ -60,7 +60,7 @@ class ValidatorUtil {
       return '매장소개를 입력해주세요';
     }
     if (value != null && value.length < 10) {
-      return '닉네임은 10글자 이상이여야합니다';
+      return '매장소개는 10글자 이상이여야합니다';
     }
     return null;
   }

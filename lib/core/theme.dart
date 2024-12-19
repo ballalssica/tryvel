@@ -4,6 +4,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
         centerTitle: true,
         titleTextStyle: TextStyle(
           color: Color(0xFF4A4A4A),
@@ -14,6 +15,7 @@ class AppTheme {
           color: Colors.amber, // 뒤로가기 아이콘 색상을 앰버로 설정
         ),
       ),
+      scaffoldBackgroundColor: Color(0xFFF5F5F5),
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
       highlightColor: Colors.amber,
       elevatedButtonTheme: ElevatedButtonThemeData(
