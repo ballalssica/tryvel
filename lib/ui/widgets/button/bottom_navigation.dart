@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/ui/home/home_page.dart';
+import 'package:tryvel/ui/mypage/mypage_screen/mypage_list_page.dart';
 import 'package:tryvel/ui/mypage/mypage_screen/mypage_screen_page.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -44,7 +45,7 @@ class BottomNavigation extends StatelessWidget {
             context,
             icon: Icons.person,
             label: '마이',
-            page: MypageScreenPage(),
+            page: MypageListPage(),
           ),
         ],
       ),

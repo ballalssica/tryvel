@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/ui/mypage/mypage_screen/widgets/campaign_registration.dart';
-import 'package:tryvel/ui/mypage/mypage_screen/widgets/place_management.dart';
+import 'package:tryvel/ui/mypage/widgets/campaign_registration.dart';
+import 'package:tryvel/ui/mypage/widgets/place_management.dart';
 
 class MypageScreenPage extends StatelessWidget {
   final String imageUrl = 'https://picsum.photos/200'; // 동그란 사진 URL (더미 이미지)
@@ -15,6 +15,12 @@ class MypageScreenPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.keyboard_arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ), // 빈 AppBar
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0), // 좌우 패딩
