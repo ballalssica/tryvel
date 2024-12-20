@@ -16,8 +16,9 @@ class TwoButtonPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // 팝업 모서리 둥글게
+        borderRadius: BorderRadius.circular(5), // 팝업 모서리 둥글게
       ),
+      backgroundColor: Colors.white, // 배경색을 화이트로 설정
       child: Column(
         mainAxisSize: MainAxisSize.min, // 팝업의 크기를 내용에 맞게 설정
         children: [
@@ -41,18 +42,19 @@ class TwoButtonPopup extends StatelessWidget {
                 child: TextButton(
                   onPressed: onCancel,
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: const Color(0xFF4A4A4A),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 16.0), // 버튼 높이를 증가
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10.0),
+                        bottomLeft: Radius.circular(5),
                       ),
                     ),
-                    side: const BorderSide(color: Colors.amber),
                   ),
                   child: const Text(
                     '취소',
                     style: TextStyle(
-                      color: Colors.amber,
+                      color: Colors.white,
                       fontSize: 16.0,
                     ),
                   ),
@@ -64,11 +66,12 @@ class TwoButtonPopup extends StatelessWidget {
                 child: TextButton(
                   onPressed: onConfirm,
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber, // 배경색
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: Colors.amber,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 16.0), // 버튼 높이를 증가
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10.0),
+                        bottomRight: Radius.circular(5),
                       ),
                     ),
                   ),

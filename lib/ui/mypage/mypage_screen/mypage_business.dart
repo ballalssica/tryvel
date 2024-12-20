@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tryvel/ui/campaign/campain_management/campain_management_page.dart';
 import 'package:tryvel/ui/mypage/mypage_screen/mypage_list_page.dart';
 import 'package:tryvel/ui/mypage/widgets/business_name_card.dart';
-import 'package:tryvel/ui/mypage/widgets/place_management.dart';
+import 'package:tryvel/ui/place/place_management/place_management.dart';
 import 'package:tryvel/ui/widgets/button/content_button.dart';
 import 'package:tryvel/ui/widgets/divider_container.dart';
 
@@ -10,7 +11,6 @@ class MypageBusiness extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('마이페이지'),
         leading: IconButton(
           icon: const Icon(Icons.keyboard_arrow_left),
           onPressed: () {
@@ -20,7 +20,7 @@ class MypageBusiness extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min, // 자식 위젯이 필요한 만큼만 공간 차지
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BusinessNameCard(),
@@ -33,7 +33,7 @@ class MypageBusiness extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MypageListPage(),
+                    builder: (context) => CampainManagementPage(),
                   ),
                 );
               },

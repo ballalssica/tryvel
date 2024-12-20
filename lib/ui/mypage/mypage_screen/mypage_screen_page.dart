@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tryvel/ui/mypage/widgets/campaign_registration.dart';
-import 'package:tryvel/ui/mypage/widgets/place_management.dart';
+import 'package:tryvel/ui/place/place_management/place_management.dart';
 
 class MypageScreenPage extends StatelessWidget {
   final String imageUrl = 'https://picsum.photos/200'; // 동그란 사진 URL (더미 이미지)

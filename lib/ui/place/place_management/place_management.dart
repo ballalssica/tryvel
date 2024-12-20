@@ -181,7 +181,7 @@ class _PlaceManagementState extends State<PlaceManagement> {
                                     builder: (context) {
                                       return TwoButtonPopup(
                                         content: Text(
-                                          '${place.name}을 삭제하시겠습니까?',
+                                          '${place.name}를 삭제하시겠습니까?',
                                           textAlign: TextAlign.center,
                                           style:
                                               const TextStyle(fontSize: 18.0),

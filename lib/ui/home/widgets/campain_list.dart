@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tryvel/ui/widgets/campaign_item.dart';
+import 'package:tryvel/ui/campaign/widgets/campaign_item.dart';
 
 class CampaignList extends StatelessWidget {
   // 외부에서 데이터를 주입받을 수 있도록 파라미터 추가

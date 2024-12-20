@@ -7,7 +7,6 @@ class MypageInfluencer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('마이페이지'),
         leading: IconButton(
           icon: const Icon(Icons.keyboard_arrow_left),
           onPressed: () {
